@@ -1,3 +1,5 @@
+#QUE - 01
+
 # Import necessary libraries
 from pyspark.sql import SparkSession
 
@@ -35,3 +37,52 @@ top_rated_movies = spark.sql(query)
 
 # Show the results
 top_rated_movies.show()
+
+
+
+
+------------------------------------------------------------
+#QUE - 02
+
+# Import required libraries
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, FloatType
+
+# Set up a Spark session
+spark = SparkSession.builder.appName("YelpAnalysis").getOrCreate()
+
+# Define the schema for the Yelp reviews dataset
+schema = StructType([
+  StructField("business_id", StringType(), True),
+  StructField("cool", IntegerType(), True),
+  StructField("date", StringType(), True),
+  StructField("funny", IntegerType(), True),
+  StructField("review_id", StringType(), True),
+  StructField("stars", IntegerType(), True),
+  StructField("text", StringType(), True),
+  StructField("useful", IntegerType(), True),
+  StructField("user_id", StringType(), True)
+])
+
+# Read the Yelp reviews dataset in Parquet format
+yelp_reviews = spark.read.schema(schema).parquet("/mnt/yelp-dataset/reviews.parquet")
+
+# Print the schema and first few rows of the dataset
+yelp_reviews.printSchema()
+yelp_reviews.show(5)
+
+# Perform some basic analysis on the dataset
+# Get the total number of reviews
+num_reviews = yelp_reviews.count()
+print("Total number of reviews:", num_reviews)
+
+# Get the average star rating
+avg_stars = yelp_reviews.select(avg("stars")).collect()[0][0]
+print("Average star rating:", avg_stars)
+
+# Get the top 10 most reviewed businesses
+top_businesses = yelp_reviews.groupBy("business_id").count().orderBy(desc("count")).limit(10)
+print("Top 10 most reviewed businesses:")
+top_businesses.show()
+
