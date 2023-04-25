@@ -7,10 +7,10 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName("MovielensAnalysis").getOrCreate()
 
 # Load the dataset
-ratings_df = spark.read.format("csv").option("header", True).load("dbfs:/mnt/<datalake-name>/<path-to-dataset>/ratings.csv")
-movies_df = spark.read.format("csv").option("header", True).load("dbfs:/mnt/<datalake-name>/<path-to-dataset>/movies.csv")
-links_df = spark.read.format("csv").option("header", True).load("dbfs:/mnt/<datalake-name>/<path-to-dataset>/links.csv")
-tags_df = spark.read.format("csv").option("header", True).load("dbfs:/mnt/<datalake-name>/<path-to-dataset>/tags.csv")
+ratings_df = spark.read.format("csv").option("header", True).load("dbfs:/mnt/hdfsx/db/ratings.csv")
+movies_df = spark.read.format("csv").option("header", True).load("dbfs:/mnt/hdfsx/db/movies.csv")
+links_df = spark.read.format("csv").option("header", True).load("dbfs:/mnt/hdfsx/db/links.csv")
+tags_df = spark.read.format("csv").option("header", True).load("dbfs:/mnt/hdfsx/db/tags.csv")
 
 # View the schema of the ratings dataframe
 ratings_df.printSchema()
