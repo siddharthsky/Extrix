@@ -6,4 +6,5 @@ EXTRIX is a repository for storing miscellaneous files and resources that don't 
 Here's a list of some of the files and resources you can find in this repository:
 
     Submissions
+    Work of art xD
 
