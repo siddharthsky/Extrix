@@ -1,0 +1,71 @@
+Question 1 : Assume that you are a data engineer for company ABC  The company wanted to do cloud migration from their on-premises to Microsoft Azure cloud.  You probably will use the Azure data factory for this purpose.  You have created a pipeline that copies data of one table from on-premises to Azure cloud. What are the necessary steps you need to take to ensure this pipeline will get executed successfully?
+Question 2: Assume that you are working for a company ABC as a data engineer. You have successfully created a pipeline needed for migration. This is working fine in your development environment.  how would you deploy this pipeline in production without making any or very minimal  changes?
+
+Question 3: Assume that you have around 1 TB of data stored in Azure blob storage . This data is in multiple csv files. You are asked to do couple of transformations on this data as per business logic and needs,  before moving this data into the staging container.  How would you plan and architect the solution for this given scenario. Explain with the details.
+Question 4: Assume that you have an IoT device enabled on your vehicle. This device from the vehicle sends the data every hour and this is getting stored in a blob storage location in Microsoft  Azure. You have to move this data from this storage location into the SQL database.  How would design the solution explain with reason.
+Question 5: Assume that you are doing some R&D over the data about the COVID across the world. This data is available by some of the public forum which is exposed as REST api. How would you plan the solution in this scenario?
+
+Answers : 
+
+Question 1:
+To ensure the pipeline executes successfully, I would:
+
+1. Test the pipeline in the development environment thoroughly to validate the logic
+2. Check that the source and sink connections are correct 
+3. Add error handling logic and alerts to the pipeline 
+4. Schedule the pipeline to run during non-peak hours to avoid data latency 
+5. Monitor the pipeline runs to check for any failures and take corrective actions.
+
+Question 2: 
+To deploy the pipeline to production with minimal changes, I would:
+
+1. Create a release pipeline in Azure DevOps to deploy the data factory resources
+2. Add the development data factory as the source 
+3. Choose the production data factory as the target
+4. Map the development artifacts like datasets, pipelines, etc. to production  
+5. Add pre-deployment approvals and checks 
+6. Release the pipeline to deploy the development artifacts to production.
+
+Question 3:
+To transform 1 TB of data in Azure blob storage, I would: 
+
+1. Create an Azure Data Factory pipeline 
+2. Add a Copy Activity to copy the csv files from blob storage to an Azure SQL database (for staging)
+3. Add a Data Flow activity which would:
+- Read the data from the staging table 
+- Apply any transformations (cast columns, split columns, etc) 
+- Write the transformed data to the target table
+4. Create a sink dataset to point to the target table
+5. Create a tumbling window trigger to schedule the pipeline hourly
+6. Add error handling and alerts to the pipeline
+7. Monitor the pipeline runs to check for any issues.
+
+Question 4:
+To move IoT data from blob storage to SQL database, I would:
+
+1. Create an Azure Data Factory pipeline
+2. Add a Copy Activity which would:  
+- Read data from the blob storage as a source 
+- Write to a staging table in SQL database as a sink
+3. Create a SQL Server dataset to point to the staging table
+4. Create a tumbling window trigger to schedule the pipeline hourly
+5. Add a Data Flow activity which would read from the staging table, apply any transformations needed and write to the target table
+6. Create a sink dataset to point to the target table 
+7. Add error handling and alerts to the pipeline
+8. Monitor the pipeline runs to check for any issues.
+
+Question 5:
+To analyze COVID data from a REST API, I would:
+
+1. Create an Azure Data Factory pipeline
+2. Add a Web Activity to call the REST API and store the response in a temporary table
+3. Add a Data Flow activity which would:  
+- Read data from the temporary table  
+- Apply any cleaning or transformations required
+- Write to a persistence staging table 
+4. Create SQL Server datasets to point to the temporary and staging tables
+5. Add a tumbling window trigger to schedule the pipeline hourly to refresh the data
+6. Use Data Factory compute runtime/Notebooks to analyze the data   
+7. Visualize the data using Power BI dashboards.
+8. Add error handling and alerts to the pipeline
+9. Monitor the pipeline runs to check for any issues.
