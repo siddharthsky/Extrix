@@ -1,0 +1,6 @@
+************************************* Invoked: Mon Sep 4 16:52:09 2023
+[0] Arguments: C:\Users\SkyLake\Downloads\msys2-x86_64-20230718.exe
+[12] Operations sanity check succeeded.
+[13] Warning: Cannot create lock file "C:\Users\SkyLake\AppData\Local\Temp\msys2-x86_64-202307181234865.lock": The process cannot access the file because it is being used by another process.
+ (0x00000020)
+[41] UnableToStart : Unable to start installer : Another msys2-x86_64-20230718 instance is already running. Wait until it finishes, close it, or restart your system.
