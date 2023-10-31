@@ -1,0 +1,71 @@
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
+[GIN-debug] HEAD   /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
+[GIN-debug] [WARNING] Since SetHTMLTemplate() is NOT thread-safe. It should only be called
+at initialization. ie. before any route is registered or the router is listening in a socket:
+
+	router := gin.Default()
+	router.SetHTMLTemplate(template) // << good place
+
+[GIN-debug] GET    /                         --> github.com/rabilrbl/jiotv_go/internals/handlers.IndexHandler (3 handlers)
+[GIN-debug] GET    /login                    --> github.com/rabilrbl/jiotv_go/internals/handlers.LoginHandler (3 handlers)
+[GIN-debug] POST   /login                    --> github.com/rabilrbl/jiotv_go/internals/handlers.LoginHandler (3 handlers)
+[GIN-debug] GET    /live/:id                 --> github.com/rabilrbl/jiotv_go/internals/handlers.LiveHandler (3 handlers)
+[GIN-debug] GET    /render                   --> github.com/rabilrbl/jiotv_go/internals/handlers.RenderHandler (3 handlers)
+[GIN-debug] GET    /renderKey                --> github.com/rabilrbl/jiotv_go/internals/handlers.RenderKeyHandler (3 handlers)
+[GIN-debug] GET    /channels                 --> github.com/rabilrbl/jiotv_go/internals/handlers.ChannelsHandler (3 handlers)
+[GIN-debug] GET    /play/:id                 --> github.com/rabilrbl/jiotv_go/internals/handlers.PlayHandler (3 handlers)
+[GIN-debug] GET    /player/:id               --> github.com/rabilrbl/jiotv_go/internals/handlers.PlayerHandler (3 handlers)
+[GIN-debug] GET    /clappr/:id               --> github.com/rabilrbl/jiotv_go/internals/handlers.ClapprHandler (3 handlers)
+[GIN-debug] POST   /blank                    --> github.com/rabilrbl/jiotv_go/internals/handlers.BlankHandler (3 handlers)
+[GIN-debug] GET    /favicon.ico              --> github.com/rabilrbl/jiotv_go/internals/handlers.FaviconHandler (3 handlers)
+[GIN] 2023/09/02 - 07:48:31 | 200 |      197.24µs |             ::1 | GET      "/static/channels.js"
+[GIN] 2023/09/02 - 07:48:31 | 200 |      90.208µs |             ::1 | GET      "/static/index.js"
+[GIN] 2023/09/02 - 07:48:31 | 200 |       95.99µs |             ::1 | GET      "/static/common.js"
+[GIN] 2023/09/02 - 07:48:33 | 200 |  752.959658ms |             ::1 | GET      "/"
+[GIN] 2023/09/02 - 07:48:34 | 200 |      74.219µs |             ::1 | GET      "/static/channels.js"
+[GIN] 2023/09/02 - 07:48:34 | 200 |     119.375µs |             ::1 | GET      "/static/index.js"
+[GIN] 2023/09/02 - 07:48:34 | 200 |      78.593µs |             ::1 | GET      "/static/common.js"
+[GIN] 2023/09/02 - 07:48:44 | 200 |     424.011µs |             ::1 | GET      "/static/favicon.ico"
+[GIN] 2023/09/02 - 07:48:46 | 200 |     172.187µs |             ::1 | GET      "/play/143"
+[GIN] 2023/09/02 - 07:48:46 | 200 |      80.729µs |             ::1 | GET      "/static/common.js"
+[GIN] 2023/09/02 - 07:48:46 | 200 |     313.125µs |             ::1 | GET      "/player/143"
+[GIN] 2023/09/02 - 07:48:46 | 200 |    1.071875ms |             ::1 | GET      "/static/flowplayer.css"
+[GIN] 2023/09/02 - 07:48:46 | 200 |     980.312µs |             ::1 | GET      "/static/flowplayer.min.js"
+[GIN] 2023/09/02 - 07:48:46 | 200 |    2.219739ms |             ::1 | GET      "/static/hls.min.js"
+[GIN] 2023/09/02 - 07:48:46 | 200 |     689.687µs |             ::1 | GET      "/static/qsel.min.js"
+[GIN] 2023/09/02 - 07:48:46 | 200 |     453.021µs |             ::1 | GET      "/static/keyboard.min.js"
+[GIN] 2023/09/02 - 07:48:47 | 302 |   75.975737ms |             ::1 | GET      "/live/143.m3u8"
+[GIN] 2023/09/02 - 07:48:47 | 200 |  301.371957ms |             ::1 | GET      "/render?auth=https%3A%2F%2Fjiotvmblive.cdn.jio.com%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2Findex.m3u8%3Fminrate%3D80000%26maxrate%3D3024000%26__hdnea__%3Dst%3D1693640809~exp%3D1693644409~acl%3D%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2F%2A~hmac%3D5460c060ae4d5f8b758da4f06d48f1f4a4c355dd0187b93fd60806a290da6110&channel_key_id=143"
+[GIN] 2023/09/02 - 07:48:47 | 200 |  132.842305ms |             ::1 | GET      "/render?auth=https%3A%2F%2Fjiotvmblive.cdn.jio.com%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2FCNBC_Tv18_Prime_HD_MOB-audio_33635_eng%3D33600-video%3D148000.m3u8%3Fminrate%3D80000%26maxrate%3D3024000%26__hdnea__%3Dst%3D1693640809~exp%3D1693644409~acl%3D%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2F%2A~hmac%3D5460c060ae4d5f8b758da4f06d48f1f4a4c355dd0187b93fd60806a290da6110&channel_key_id=143"
+[GIN] 2023/09/02 - 07:48:47 | 200 |   13.371928ms |             ::1 | GET      "/renderKey?auth=https%3A%2F%2Ftv.media.jio.com%2Ffallback%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2Fhls%2Faes128.key-6e46ed19ca835c2a92c485f0f9b95f35-1693640400.pkey&channel_key_id=143"
+[GIN] 2023/09/02 - 07:48:48 | 200 |  129.227513ms |             ::1 | GET      "/render?auth=https%3A%2F%2Fjiotvmblive.cdn.jio.com%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2FCNBC_Tv18_Prime_HD_MOB-audio_98834_eng%3D98800-video%3D376800.m3u8%3Fminrate%3D80000%26maxrate%3D3024000%26__hdnea__%3Dst%3D1693640809~exp%3D1693644409~acl%3D%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2F%2A~hmac%3D5460c060ae4d5f8b758da4f06d48f1f4a4c355dd0187b93fd60806a290da6110&channel_key_id=143"
+[GIN] 2023/09/02 - 07:48:48 | 200 |      20.157µs |             ::1 | POST     "/blank"
+[GIN] 2023/09/02 - 07:48:48 | 200 |  138.581368ms |             ::1 | GET      "/render?auth=https%3A%2F%2Fjiotvmblive.cdn.jio.com%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2FCNBC_Tv18_Prime_HD_MOB-audio_98834_eng%3D98800-video%3D1173600.m3u8%3Fminrate%3D80000%26maxrate%3D3024000%26__hdnea__%3Dst%3D1693640809~exp%3D1693644409~acl%3D%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2F%2A~hmac%3D5460c060ae4d5f8b758da4f06d48f1f4a4c355dd0187b93fd60806a290da6110&channel_key_id=143"
+[GIN] 2023/09/02 - 07:48:49 | 200 |      21.979µs |             ::1 | POST     "/blank"
+[GIN] 2023/09/02 - 07:48:49 | 200 |  131.160065ms |             ::1 | GET      "/render?auth=https%3A%2F%2Fjiotvmblive.cdn.jio.com%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2FCNBC_Tv18_Prime_HD_MOB-audio_98834_eng%3D98800-video%3D2906400.m3u8%3Fminrate%3D80000%26maxrate%3D3024000%26__hdnea__%3Dst%3D1693640809~exp%3D1693644409~acl%3D%2Fbpk-tv%2FCNBC_Tv18_Prime_HD_MOB%2FFallback%2F%2A~hmac%3D5460c060ae4d5f8b758da4f06d48f1f4a4c355dd0187b93fd60806a290da6110&channel_key_id=143"
+[GIN] 2023/09/02 - 07:48:51 | 200 |       9.479µs |             ::1 | POST     "/blank"
+[GIN] 2023/09/02 - 07:48:52 | 200 |  419.087593ms |             ::1 | GET      "/"
+[GIN] 2023/09/02 - 07:48:52 | 200 |      55.469µs |             ::1 | POST     "/blank"
+[GIN] 2023/09/02 - 07:48:52 | 200 |      38.646µs |             ::1 | GET      "/static/channels.js"
+[GIN] 2023/09/02 - 07:48:52 | 200 |      58.177µs |             ::1 | GET      "/static/index.js"
+[GIN] 2023/09/02 - 07:48:52 | 200 |      85.833µs |             ::1 | GET      "/static/common.js"
+[GIN] 2023/09/02 - 07:49:03 | 200 |  252.283307ms |   192.168.1.111 | GET      "/"
+[GIN] 2023/09/02 - 07:49:03 | 200 |    3.094636ms |   192.168.1.111 | GET      "/static/channels.js"
+[GIN] 2023/09/02 - 07:49:03 | 200 |     109.583µs |   192.168.1.111 | GET      "/static/index.js"
+[GIN] 2023/09/02 - 07:49:03 | 200 |      73.125µs |   192.168.1.111 | GET      "/static/common.js"
+[GIN] 2023/09/02 - 07:49:10 | 200 |     462.136µs |   192.168.1.111 | GET      "/play/143"
+[GIN] 2023/09/02 - 07:49:10 | 200 |      74.948µs |   192.168.1.111 | GET      "/static/common.js"
+[GIN] 2023/09/02 - 07:49:11 | 200 |     117.553µs |   192.168.1.111 | GET      "/player/143"
+[GIN] 2023/09/02 - 07:49:11 | 200 |    1.012084ms |   192.168.1.111 | GET      "/static/flowplayer.css"
+[GIN] 2023/09/02 - 07:49:11 | 200 |     474.218µs |   192.168.1.111 | GET      "/static/flowplayer.min.js"
+[GIN] 2023/09/02 - 07:49:11 | 200 |     623.958µs |   192.168.1.111 | GET      "/static/qsel.min.js"
+[GIN] 2023/09/02 - 07:49:11 | 200 |    2.075261ms |   192.168.1.111 | GET      "/static/hls.min.js"
+[GIN] 2023/09/02 - 07:49:11 | 200 |    1.467344ms |   192.168.1.111 | GET      "/static/keyboard.min.js"
+[GIN] 2023/09/02 - 07:49:13 | 301 |      28.906µs |   192.168.1.111 | GET      "/favicon.ico"
+[GIN] 2023/09/02 - 07:49:13 | 200 |     229.322µs |   192.168.1.111 | GET      "/static/favicon.ico"
