@@ -24,4 +24,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: compressed-folder
-          path: ubuntu-unity-chro
+          path: '*.zip'  # Upload all zip files in the root directory
