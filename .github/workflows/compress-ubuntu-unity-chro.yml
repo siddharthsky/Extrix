@@ -21,7 +21,7 @@ jobs:
         run: zip -r ubuntu-unity-chro.zip ubuntu-unity-chro -x "ubuntu-unity-chro.zip"  # Exclude main zip file from compression
 
       - name: Save as Artifact
-        uses: actions/upload-artifact
+        uses: actions/upload-artifact@v4
         with:
           name: compressed-folder
-          path: '*.zip'  # Upload all zip files in the root directory
+          path: ubuntu-unity-chro.zip
