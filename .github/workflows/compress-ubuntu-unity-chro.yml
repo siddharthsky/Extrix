@@ -1,0 +1,27 @@
+name: Compress Unity
+
+on:
+  push:
+    branches:
+      - main  # Main branch changes only
+    paths:
+      - 'ubuntu-unity-chro/**'  # Folder to compress
+
+jobs:
+  compress-folder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install zip
+        run: sudo apt-get update && sudo apt-get install -y zip
+
+      - name: Compress Folder
+        run: zip -r ubuntu-unity-chro.zip ubuntu-unity-chro -x "ubuntu-unity-chro.zip"  # Exclude main zip file from compression
+
+      - name: Save as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: compressed-folder
+          path: ubuntu-unity-chro.zip
