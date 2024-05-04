@@ -1,5 +1,12 @@
 name: Compress Unity
-on: [push]
+
+on:
+  push:
+    branches:
+      - main  # Main branch changes only
+    paths:
+      - 'ubuntu-unity-chro/**'  # Folder to compress
+      
 jobs:
   To-Zip:
     runs-on: ubuntu-latest
