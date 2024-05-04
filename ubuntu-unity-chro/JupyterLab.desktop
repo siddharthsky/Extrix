@@ -1,0 +1,7 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=JupyterLab
+Exec=jupyter lab --allow-root --ip=0.0.0.0
+Terminal=true
+Type=Application
+Icon=/home/linux/Downloads/TR-DATA/zicons/Jupyter_logo.svg
