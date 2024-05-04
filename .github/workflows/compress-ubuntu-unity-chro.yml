@@ -14,6 +14,6 @@ jobs:
       - name: Commit and push
         uses: EndBug/add-and-commit@v7
         with:
-          add: '["ubuntu-unity-chro.zip"]'
+          add: '["ubuntu-unity-chro/ubuntu-unity-chro.zip"]'
           message: 'Automated commit: Updated zip file'
           push: true
