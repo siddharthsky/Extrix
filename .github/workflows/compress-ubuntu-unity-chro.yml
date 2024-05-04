@@ -1,36 +1,18 @@
 name: Compress Unity
-
-on:
-  push:
-    branches:
-      - main  # Main branch changes only
-    paths:
-      - 'ubuntu-unity-chro/**'  # Folder to compress
-
+on: [push]
 jobs:
-  compress-folder:
+  To-Zip:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Install zip
-        run: sudo apt-get update && sudo apt-get install -y zip
-
+      - name: Checkout 
+        uses: actions/checkout@v3
+      
       - name: Compress Folder
-        run: zip -r ubuntu-unity-chro.zip ubuntu-unity-chro -x "ubuntu-unity-chro.zip"  # Exclude main zip file from compression
+        run: zip -r -q folder.zip folder
 
-      - name: Save as Artifact
-        uses: actions/upload-artifact@v2
+      - name: Commit and push
+        uses: EndBug/add-and-commit@v7
         with:
-          name: compressed-folder
-          path: ubuntu-unity-chro.zip
-
-      - name: pull latest
-        run: git pull
-
-      - name: Commit updated zip file
-        run: |
-          git add ubuntu-unity-chro.zip
-          git commit -m "Automated commit: Updated zip file"
-          git push
+          add: '["folder.zip"]'
+          message: 'Automated commit: Updated zip file'
+          push: true
