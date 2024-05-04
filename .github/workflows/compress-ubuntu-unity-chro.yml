@@ -24,4 +24,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: compressed-folder
-          path: ubuntu-unity-chro.zip
+          path: ubuntu-unity-chro
