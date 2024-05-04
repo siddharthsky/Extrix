@@ -9,11 +9,18 @@ jobs:
       
       - name: Compress Folder
         run: zip -r -q ubuntu-unity-chro.zip ubuntu-unity-chro
-        
+
+      # Create Assembly folder if not exists
+      - name: Create assembly folder
+        run: mkdir -p Assembly
+      
+      # Move the zip file to assembly folder
+      - name: Move zip file to assembly folder
+        run: mv ubuntu-unity-chro.zip Assembly/
 
       - name: Commit and push
         uses: EndBug/add-and-commit@v7
         with:
-          add: '["ubuntu-unity-chro/ubuntu-unity-chro.zip"]'
+          add: '["Assembly/ubuntu-unity-chro.zip"]'
           message: 'Automated commit: Updated zip file'
           push: true
