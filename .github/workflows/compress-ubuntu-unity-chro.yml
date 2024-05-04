@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Install zip
         run: sudo apt-get update && sudo apt-get install -y zip
@@ -21,7 +21,16 @@ jobs:
         run: zip -r ubuntu-unity-chro.zip ubuntu-unity-chro -x "ubuntu-unity-chro.zip"  # Exclude main zip file from compression
 
       - name: Save as Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v2
         with:
           name: compressed-folder
           path: ubuntu-unity-chro.zip
+
+      - name: pull latest
+        run: git pull
+
+      - name: Commit updated zip file
+        run: |
+          git add ubuntu-unity-chro.zip
+          git commit -m "Automated commit: Updated zip file"
+          git push
