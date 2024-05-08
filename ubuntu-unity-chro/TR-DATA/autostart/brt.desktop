@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec="/home/linux/.config/autostart/startBC.sh"
+Exec="/home/linux/.config/autostart/brt.sh"
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
