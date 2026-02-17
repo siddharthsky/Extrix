@@ -1,0 +1,191 @@
+#!/bin/bash
+set -euo pipefail
+
+############################################
+# Detect shell
+############################################
+SHELL_NAME=$(basename "$SHELL")
+
+case "$SHELL_NAME" in
+    bash|zsh|fish) ;;
+    *)
+        echo "Unsupported shell: $SHELL_NAME"
+        exit 1
+        ;;
+esac
+
+############################################
+# Utility
+############################################
+
+retrieve_first_line() {
+    [[ -f "$1" ]] && head -n 1 "$1" || echo ""
+}
+
+Server_Runner() {
+    "$HOME/.jiotv_go/bin/jiotv_go" -v || true
+    echo "---------------------------"
+    pkill -f "$HOME/.jiotv_go/bin/jiotv_go" || true
+    pkill -f jiotv_go || true
+}
+
+############################################
+# DRM Helper
+############################################
+
+check_drm() {
+    local DRM_FILE="$HOME/.jiotv_go/bin/drm/on.drm"
+
+    if [[ -f "$DRM_FILE" ]]; then
+        export JIOTV_DRM=true
+    else
+        export JIOTV_DRM=false
+    fi
+
+    echo "DRM is [$JIOTV_DRM]"
+}
+
+############################################
+# Port Loader
+############################################
+
+load_port() {
+    local cfg="$HOME/.jiotv_go/bin/server_port.cfg"
+    local default_port=5001
+
+    retrieved_port=$(retrieve_first_line "$cfg")
+
+    if [[ "$retrieved_port" =~ ^[0-9]{4}$ ]]; then
+        port_to_use="$retrieved_port"
+    else
+        mkdir -p "$(dirname "$cfg")"
+        echo "$default_port" > "$cfg"
+        chmod 600 "$cfg"
+        port_to_use="$default_port"
+    fi
+}
+
+############################################
+# AM Reader
+############################################
+
+get_value_from_key() {
+    local KEY="$1"
+    local VAR="$2"
+
+    logcat -c
+    am start -a com.termux.GetReceiver -n com.termux/.SkySharedPrefActivity --es key "$KEY"
+    sleep 1
+
+    local VALUE
+    VALUE=$(logcat -d | grep "$KEY" | awk -F'value: ' '{print $2}' | head -n 1)
+
+    eval "$VAR='$VALUE'"
+    echo "Captured $KEY => $VALUE"
+}
+
+############################################
+# Main Server Runner
+############################################
+
+TheShowRunner() {
+    load_port
+    check_drm
+
+    get_value_from_key "server_setup_isLocal" VARIABLE03
+
+    [[ -d zeeON ]] && get_value_from_key "server_setup_EX_done" VARIABLE04
+    [[ -d tataON ]] && get_value_from_key "server_setup_isTATA" VARIABLE05
+    [[ -d tataON2 ]] && get_value_from_key "server_setup_isTATA2" VARIABLE06
+
+    termux-wake-lock
+
+    if [[ "$VARIABLE03" == "Yes" ]]; then
+        "$HOME/.jiotv_go/bin/jiotv_go" run --port "$port_to_use" >/dev/null 2>&1 &
+        echo "Local server on $port_to_use"
+    else
+        "$HOME/.jiotv_go/bin/jiotv_go" run --port "$port_to_use" --public >/dev/null 2>&1 &
+        echo "Public server on $port_to_use"
+    fi
+
+    [[ "${VARIABLE05:-}" == "Yes" ]] && (cd "$HOME/tataON" && php -S 0.0.0.0:5353 >/dev/null 2>&1 &)
+    [[ "${VARIABLE06:-}" == "Yes" ]] && (cd "$HOME/tataON2" && php -S 0.0.0.0:5399 >/dev/null 2>&1 &)
+    [[ "${VARIABLE04:-}" == "Yes" ]] && (cd "$HOME/zeeON" && php -S 0.0.0.0:5349 >/dev/null 2>&1 &)
+
+    for i in {1..5}; do
+        if curl -s "http://localhost:$port_to_use" >/dev/null; then
+            am start --user 0 -a com.termux.SKY_ACTION -n com.termux/.SkyActionActivity -e mode loginstatus2 &
+            return
+        fi
+        sleep 5
+    done
+
+    echo "Server failed to start"
+}
+
+############################################
+# One-time Runner
+############################################
+
+TheShowRunner_onetime() {
+    load_port
+    check_drm
+
+    am start -a com.termux.SaveReceiver -n com.termux/.SkySharedPrefActivity \
+        --es key server_setup_username --es value "$(whoami)"
+
+    get_value_from_key "server_setup_isLocal" VARIABLE03
+
+    if [[ "$VARIABLE03" == "Yes" ]]; then
+        "$HOME/.jiotv_go/bin/jiotv_go" run >/dev/null 2>&1 &
+    else
+        "$HOME/.jiotv_go/bin/jiotv_go" run -P >/dev/null 2>&1 &
+    fi
+
+    for i in {1..5}; do
+        if curl -s "http://localhost:$port_to_use" >/dev/null; then
+            am start --user 0 -a com.termux.SKY_ACTION -n com.termux/.SkyActionActivity -e mode loginstatus2
+            return
+        fi
+        sleep 5
+    done
+}
+
+############################################
+# Install helpers
+############################################
+
+Setup_Prerequisites() {
+    echo "allow-external-apps = true" > "$HOME/.termux/termux.properties"
+
+    curl -SL --retry 2 -o "$HOME/.set_password.exp" \
+    https://raw.githubusercontent.com/siddharthsky/CustTermux/main/_BootStrap/etc/.set_password.exp
+
+    chmod 755 "$HOME/.set_password.exp"
+}
+
+Setup_Postrequisites() {
+    curl -SL --retry 2 -o "$HOME/.set_tls.exp" \
+    https://raw.githubusercontent.com/siddharthsky/CustTermux/main/_BootStrap/etc/.set_tls.exp
+
+    chmod 755 "$HOME/.set_tls.exp"
+
+    curl -SL --retry 2 -o "$HOME/.jiotv_go/bin/config.json" \
+    https://raw.githubusercontent.com/siddharthsky/CustTermux/main/_BootStrap/etc/config.json
+}
+
+############################################
+# Main
+############################################
+
+FILE_PATH="$HOME/.jiotv_go/bin/jiotv_go"
+
+if [[ ! -f "$FILE_PATH" ]]; then
+    Setup_Prerequisites
+    Setup_Postrequisites
+    Server_Runner
+    TheShowRunner_onetime
+else
+    Server_Runner
+    TheShowRunner
+fi
