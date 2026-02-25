@@ -9,8 +9,6 @@ Setup_Prerequisites() {
     fi
 }
 
-echo "Running Setup_reposs"
-
 Check_And_Install_Packages() {
     FLAG="$HOME/.custtermux_pkgs_installed"
 
@@ -34,7 +32,7 @@ Check_And_Install_Packages() {
     touch "$FLAG"
 }
 
-echo "Running Setup_reposs"
+echo "Running Setup_repossX"
 
 Setup_Prerequisites
 Check_And_Install_Packages
