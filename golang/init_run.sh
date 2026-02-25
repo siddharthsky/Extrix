@@ -10,6 +10,26 @@ Setup_Prerequisites() {
     fi
 }
 
-echo "Running Setpup _repo"
+echo "Running Setpup _repo2"
+
+Check_And_Install_Packages() {
+    echo "Checking required packages..."
+
+    # Update package list first (optional but recommended)
+    pkg update -y
+
+    for pkg_name in php git wget; do
+        if ! command -v "$pkg_name" >/dev/null 2>&1; then
+            echo "$pkg_name not found. Installing..."
+            pkg install -y "$pkg_name"
+        else
+            echo "$pkg_name already installed."
+        fi
+    done
+}
+
+echo "Running Setup_repo2"
 
 Setup_Prerequisites
+
+Check_And_Install_Packages
