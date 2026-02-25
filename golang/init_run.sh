@@ -1,4 +1,3 @@
-# Package list (easy to edit)
 REQUIRED_PACKAGES=(php git wget)
 
 Setup_Prerequisites() {
@@ -9,6 +8,8 @@ Setup_Prerequisites() {
         chmod 755 "$HOME/.termux/termux.properties"
     fi
 }
+
+echo "Running Setup_reposs"
 
 Check_And_Install_Packages() {
     FLAG="$HOME/.custtermux_pkgs_installed"
