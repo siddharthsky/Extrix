@@ -13,19 +13,25 @@ Setup_Prerequisites() {
 echo "Running Setpup _repo2"
 
 Check_And_Install_Packages() {
-    echo "Checking required packages..."
+    FLAG="$HOME/.custtermux_pkgs_installed"
 
-    # Update package list first (optional but recommended)
-    pkg update -y
+    if [ -f "$FLAG" ]; then
+        return
+    fi
 
+    missing_pkgs=""
     for pkg_name in php git wget; do
         if ! command -v "$pkg_name" >/dev/null 2>&1; then
-            echo "$pkg_name not found. Installing..."
-            pkg install -y "$pkg_name"
-        else
-            echo "$pkg_name already installed."
+            missing_pkgs="$missing_pkgs $pkg_name"
         fi
     done
+
+    if [ -n "$missing_pkgs" ]; then
+        echo "Installing:$missing_pkgs"
+        pkg install -y $missing_pkgs
+    fi
+
+    touch "$FLAG"
 }
 
 echo "Running Setup_repo2"
