@@ -3,33 +3,30 @@ REQUIRED_PACKAGES=(php git wget)
 Setup_Prerequisites() {
     mkdir -p "$HOME/.termux"
 
-    if ! grep -q "allow-external-apps = true" "$HOME/.termux/termux.properties" 2>/dev/null; then
-        echo "allow-external-apps = true" >> "$HOME/.termux/termux.properties"
-        chmod 755 "$HOME/.termux/termux.properties"
+    PROP_FILE="$HOME/.termux/termux.properties"
+
+    if [ ! -f "$PROP_FILE" ] || ! grep -q "allow-external-apps = true" "$PROP_FILE"; then
+        echo "allow-external-apps = true" >> "$PROP_FILE"
+        chmod 755 "$PROP_FILE"
     fi
 }
 
 Check_And_Install_Packages() {
-    FLAG="$HOME/.custtermux_pkgs_installed"
+    missing_pkgs=()
 
-    if [ -f "$FLAG" ]; then
-        return
-    fi
-
-    missing_pkgs=""
-
-    for pkg_name in "${REQUIRED_PACKAGES[@]}"; do
-        if ! command -v "$pkg_name" >/dev/null 2>&1; then
-            missing_pkgs="$missing_pkgs $pkg_name"
+    for pkg in "${REQUIRED_PACKAGES[@]}"; do
+        if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+            missing_pkgs+=("$pkg")
         fi
     done
 
-    if [ -n "$missing_pkgs" ]; then
-        echo "Installing:$missing_pkgs"
-        pkg install -y $missing_pkgs
+    if [ ${#missing_pkgs[@]} -gt 0 ]; then
+        echo "Installing: ${missing_pkgs[*]}"
+        pkg update -y
+        pkg install -y "${missing_pkgs[@]}"
+    else
+        echo "All required packages are already installed."
     fi
-
-    touch "$FLAG"
 }
 
 echo "Running Setup_repossX"
