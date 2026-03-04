@@ -30,13 +30,17 @@ Check_And_Install_Packages() {
         termux-reload-settings
         sleep 2
 
+        rm -f $HOME/.termux/termux.properties
+        touch $HOME/.termux/termux.properties
+        chmod 755 $HOME/.termux/termux.properties
+        echo "allow-external-apps = true" >> $HOME/.termux/termux.properties
+
         am startservice \
           -n com.termux/.app.TermuxService \
           -a com.termux.service_execute \
           --es com.termux.execute.cwd "$HOME" \
           --es com.termux.execute.command "/data/data/com.termux/files/usr/bin/bash" \
           --ez com.termux.execute.background false
-
 
     else
         echo "All required packages are already installed."
