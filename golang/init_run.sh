@@ -29,7 +29,11 @@ Check_And_Install_Packages() {
     fi
 }
 
-echo "Running Setup_repossX"
+echo "Acquiring wake lock"
+termux-wake-lock
+echo "Checking requirements"
+echo "--READY--"
+
 
 Setup_Prerequisites
 Check_And_Install_Packages
