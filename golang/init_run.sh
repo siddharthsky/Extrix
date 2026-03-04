@@ -24,6 +24,20 @@ Check_And_Install_Packages() {
         echo "Installing: ${missing_pkgs[*]}"
         pkg update -y
         pkg install -y "${missing_pkgs[@]}"
+
+        echo "Packages installed. Starting new Termux session..."
+
+        termux-reload-settings
+        sleep 2
+
+        am startservice \
+          -n com.termux/.app.TermuxService \
+          -a com.termux.service_execute \
+          --es com.termux.execute.cwd "$HOME" \
+          --es com.termux.execute.command "/data/data/com.termux/files/usr/bin/bash" \
+          --ez com.termux.execute.background false
+
+
     else
         echo "All required packages are already installed."
     fi
