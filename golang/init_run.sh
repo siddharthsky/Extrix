@@ -50,28 +50,43 @@ Check_And_Install_Packages() {
 Run_Plugins() {
     PLUGIN_DIR="$HOME/plugins"
 
-    if [ ! -d "$PLUGIN_DIR" ]; then
-        echo "Plugins folder not found: $PLUGIN_DIR"
-        return
-    fi
+    [ ! -d "$PLUGIN_DIR" ] && return
 
-    echo "Starting plugin servers..."
+    plugin_dirs=$(find "$PLUGIN_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
+    [ -z "$plugin_dirs" ] && return
 
-    find "$PLUGIN_DIR" -mindepth 1 -maxdepth 1 -type d | while read -r dir; do
+    echo -e "\e[1;37mStarting plugin servers...\e[0m"
+
+    # Color list
+    colors=(
+        "\e[1;31m" # red
+        "\e[1;32m" # green
+        "\e[1;33m" # yellow
+        "\e[1;34m" # blue
+        "\e[1;35m" # magenta
+        "\e[1;36m" # cyan
+    )
+
+    i=0
+
+    echo "$plugin_dirs" | while read -r dir; do
         port=$(basename "$dir")
 
+        [[ ! "$port" =~ ^[0-9]+$ ]] && continue
+
         if lsof -i :$port >/dev/null 2>&1; then
-            echo "Port $port already in use, skipping..."
             continue
         fi
 
-        if [[ "$port" =~ ^[0-9]+$ ]]; then
-            echo "Starting plugin on port $port"
+        # Pick color (cycle)
+        color=${colors[$((i % ${#colors[@]}))]}
+        reset="\e[0m"
 
-            (cd "$dir" && php -S 0.0.0.0:"$port" -t . > /dev/null 2>&1 &)
-        else
-            echo "Skipping invalid folder: $dir"
-        fi
+        echo -e "${color}➜ Plugin running on http://localhost:$port${reset}"
+
+        (cd "$dir" && php -S 0.0.0.0:"$port" -t . > /dev/null 2>&1 &)
+
+        ((i++))
     done
 }
 
