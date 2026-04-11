@@ -1,8 +1,8 @@
 {
-  "title": "TV VENA",
-  "repo": "https://github.com/yuvraj824/zee5",
+  "title": "DRM Live",
+  "repo": "https://github.com/drmlive/tataplay",
   "port": 8181,
   "playlist": "http://localhost:8181/playlist.php",
-  "pkg": ["php", "git"],
-  "start": "php -S 0.0.0.0:8181 -t /data/data/com.termux/files/home/zee5"
+  "pkg": ["php", "git", "wget"],
+  "start": "php -S localhost:8181 -t /data/data/com.termux/files/home/tataplay"
 }
