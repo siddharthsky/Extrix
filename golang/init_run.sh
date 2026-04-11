@@ -47,6 +47,34 @@ Check_And_Install_Packages() {
     fi
 }
 
+Run_Plugins() {
+    PLUGIN_DIR="$HOME/plugins"
+
+    if [ ! -d "$PLUGIN_DIR" ]; then
+        echo "Plugins folder not found: $PLUGIN_DIR"
+        return
+    fi
+
+    echo "Starting plugin servers..."
+
+    find "$PLUGIN_DIR" -mindepth 1 -maxdepth 1 -type d | while read -r dir; do
+        port=$(basename "$dir")
+
+        if lsof -i :$port >/dev/null 2>&1; then
+            echo "Port $port already in use, skipping..."
+            continue
+        fi
+
+        if [[ "$port" =~ ^[0-9]+$ ]]; then
+            echo "Starting plugin on port $port"
+
+            (cd "$dir" && php -S 0.0.0.0:"$port" -t . > /dev/null 2>&1 &)
+        else
+            echo "Skipping invalid folder: $dir"
+        fi
+    done
+}
+
 echo "Acquiring wake lock"
 termux-wake-lock
 echo "Checking requirements"
@@ -57,3 +85,5 @@ Setup_Prerequisites
 Check_And_Install_Packages
 
 echo "--READY--"
+
+Run_Plugins
