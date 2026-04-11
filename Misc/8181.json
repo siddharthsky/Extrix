@@ -1,0 +1,8 @@
+{
+  "title": "TV VENA",
+  "repo": "https://github.com/yuvraj824/zee5",
+  "port": 8181,
+  "playlist": "http://localhost:8181/playlist.php",
+  "pkg": ["php", "git"],
+  "start": "php -S 0.0.0.0:8181 -t /data/data/com.termux/files/home/zee5"
+}
