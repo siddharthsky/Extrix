@@ -6,5 +6,5 @@
   "playlist": "http://localhost:5006/playlist.m3u",
   "pkg": [],
   "start": "./run.bin run --port 5006",
-  "_note": "Do not rename 'run.bin'; it is hardcoded and must be used as-is. Add arguments to the start command if needed."
+  "_note": "Do not rename 'run.bin'; it is hardcoded and must be used as-is. Add arguments to the start command if needed. "
 }
