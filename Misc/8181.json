@@ -4,5 +4,5 @@
   "port": 8181,
   "playlist": "http://localhost:8181/playlist.php",
   "pkg": ["php", "git", "wget"],
-  "start": "php -S localhost:8181 -t /data/data/com.termux/files/home/tataplay"
+  "start": "php -S localhost:8181 -t ."
 }
