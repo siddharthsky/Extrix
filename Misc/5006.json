@@ -1,7 +1,7 @@
 {
   "title": "JioTVGO",
   "repo": "https://github.com/JioTV-Go/jiotv_go",
-  "binDownload": "https://github.com/JioTV-Go/jiotv_go/releases/download/v3.17.0/jiotv_go-android5-armv7",
+  "bindownload": "https://github.com/JioTV-Go/jiotv_go/releases/download/v3.17.0/jiotv_go-android5-armv7",
   "port": 5006,
   "playlist": "http://localhost:5006/playlist.m3u",
   "pkg": [],
