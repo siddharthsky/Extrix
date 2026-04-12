@@ -74,6 +74,12 @@ Run_Plugins() {
 
         [[ ! "$port" =~ ^[0-9]+$ ]] && continue
 
+        script="$dir/$port.sh"
+
+        # Skip if script not found
+        [ ! -f "$script" ] && continue
+
+        # Skip if already running
         if lsof -i :$port >/dev/null 2>&1; then
             continue
         fi
@@ -84,7 +90,8 @@ Run_Plugins() {
 
         echo -e "${color}➜ Plugin running on http://localhost:$port${reset}"
 
-        (cd "$dir" && php -S 0.0.0.0:"$port" -t . > /dev/null 2>&1 &)
+        # Run script silently in background
+        (cd "$dir" && bash "$script" > /dev/null 2>&1 &)
 
         ((i++))
     done
