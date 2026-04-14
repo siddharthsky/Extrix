@@ -35,7 +35,7 @@ else
 #!/bin/bash
 
 cd "$(pwd)"
-./run.bin --port $PORT
+./.jiotv_go/bin/jiotv_go run --port $PORT
 
 # END
 EOF
