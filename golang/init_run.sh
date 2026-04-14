@@ -109,11 +109,3 @@ Check_And_Install_Packages
 echo "--READY--"
 
 Run_Plugins
-
-
-case "$1" in
-    plugins)
-        termux-wake-lock
-        Run_Plugins
-        ;;
-esac
