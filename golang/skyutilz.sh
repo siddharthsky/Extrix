@@ -6,58 +6,50 @@ Run_Plugins() {
     export SHELL=/bin/bash
     PLUGIN_DIR="$HOME/plugins"
 
-    if [ ! -d "$PLUGIN_DIR" ]; then
-        echo "No plugin directory found."
-        return
-    fi
+    termux-wake-lock
 
-    mapfile -t plugin_dirs < <(find "$PLUGIN_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
+    [ ! -d "$PLUGIN_DIR" ] && return
 
-    if [ ${#plugin_dirs[@]} -eq 0 ]; then
-        echo "No plugins found."
-        return
-    fi
+    plugin_dirs=$(find "$PLUGIN_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
+    [ -z "$plugin_dirs" ] && return
 
     echo -e "\e[1;37mStarting plugin servers...\e[0m"
 
+    # Color list
     colors=(
-        "\e[1;31m"
-        "\e[1;32m"
-        "\e[1;33m"
-        "\e[1;34m"
-        "\e[1;35m"
-        "\e[1;36m"
+        "\e[1;31m" # red
+        "\e[1;32m" # green
+        "\e[1;33m" # yellow
+        "\e[1;34m" # blue
+        "\e[1;35m" # magenta
+        "\e[1;36m" # cyan
     )
 
-    reset="\e[0m"
     i=0
 
-    for dir in "${plugin_dirs[@]}"; do
-        port="$(basename "$dir")"
+    echo "$plugin_dirs" | while read -r dir; do
+        port=$(basename "$dir")
 
-        # only numeric folders = ports
         [[ ! "$port" =~ ^[0-9]+$ ]] && continue
 
         script="$dir/$port.sh"
 
-        # skip missing script
+        # Skip if script not found
         [ ! -f "$script" ] && continue
 
-        # skip if port already used
-        if lsof -i :"$port" >/dev/null 2>&1; then
+        # Skip if already running
+        if lsof -i :$port >/dev/null 2>&1; then
             continue
         fi
 
-        color="${colors[$((i % ${#colors[@]}))]}"
+        # Pick color (cycle)
+        color=${colors[$((i % ${#colors[@]}))]}
+        reset="\e[0m"
 
         echo -e "${color}➜ Plugin running on http://localhost:$port${reset}"
 
-        log_file="$dir/plugin.log"
-
-        (
-            cd "$dir" || exit
-            nohup bash "$script" > "$log_file" 2>&1 &
-        )
+        # Run script silently in background
+        (cd "$dir" && bash "$script" > /dev/null 2>&1 &)
 
         ((i++))
     done
