@@ -19,6 +19,7 @@ if [ "$PORT" -eq 0 ]; then
 fi
 
 echo "Installing Script..."
+export SHELL=/bin/bash
 curl -fsSL https://jiotv_go.rabil.me/install.sh | bash
 
 mv "$HOME/.jiotv_go" .
