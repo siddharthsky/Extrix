@@ -43,3 +43,6 @@ EOF
     echo "Created new script: $PORT.sh"
 fi
 
+echo "Waiting..."
+sleep 50
+
