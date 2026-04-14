@@ -1,10 +1,12 @@
 {
   "title": "JioTVGO",
   "repo": "https://github.com/JioTV-Go/jiotv_go",
-  "bin_download": "https://github.com/JioTV-Go/jiotv_go/releases/latest/download/jiotv_go-android5-armv7",
+  "bin_download": "",
   "port": 5006,
   "playlist": "http://localhost:5006/playlist.m3u",
+  "server_check_url": "http://localhost:5006/live/143.m3u8",
   "pkg": [],
   "start": "./run.bin run --port 5006",
+  "post_install_script": "https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/5006_post.sh",
   "_note": "Do not rename 'run.bin'; it is hardcoded and must be used as-is. Add arguments to the start command if needed. "
 }
