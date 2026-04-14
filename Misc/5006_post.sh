@@ -24,6 +24,8 @@ curl -fsSL https://jiotv_go.rabil.me/install.sh | bash
 
 mv "$HOME/.jiotv_go" .
 
+ln -sf "$(pwd)/.jiotv_go/bin/jiotv_go" run.bin
+
 if [ -f "run.bin" ]; then
     echo "run.bin exists → keeping existing $PORT.sh"
 else
@@ -35,7 +37,7 @@ else
 #!/bin/bash
 
 cd "$(pwd)"
-./.jiotv_go/bin/jiotv_go run --port $PORT
+./run.bin run --port $PORT
 
 # END
 EOF
