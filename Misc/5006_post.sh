@@ -43,6 +43,6 @@ EOF
     echo "Created new script: $PORT.sh"
 fi
 
-echo "Waiting..."
-sleep 50
+echo "Re-run server to launch"
+sleep 3
 
