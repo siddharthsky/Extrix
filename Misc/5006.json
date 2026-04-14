@@ -1,7 +1,7 @@
 {
   "title": "JioTVGO",
   "repo": "https://github.com/JioTV-Go/jiotv_go",
-  "bin_download": "https://github.com/JioTV-Go/jiotv_go/releases/latest/download/jiotv_go-andr",
+  "bin_download": "empty_url",
   "port": 5006,
   "playlist": "http://localhost:5006/playlist.m3u",
   "server_check_url": "http://localhost:5006/live/143.m3u8",
