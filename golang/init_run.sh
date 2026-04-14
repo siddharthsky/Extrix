@@ -119,6 +119,7 @@ case "$1" in
         Check_And_Install_Packages
         ;;
     plugins)
+        termux-wake-lock
         Run_Plugins
         ;;
     all|"")
