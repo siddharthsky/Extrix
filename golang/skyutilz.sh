@@ -1,6 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
+export SHELL=/bin/bash
 
 Run_Plugins() {
+    export SHELL=/bin/bash
     PLUGIN_DIR="$HOME/plugins"
 
     if [ ! -d "$PLUGIN_DIR" ]; then
