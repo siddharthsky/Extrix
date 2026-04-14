@@ -112,24 +112,8 @@ Run_Plugins
 
 
 case "$1" in
-    setup)
-        Setup_Prerequisites
-        ;;
-    install)
-        Check_And_Install_Packages
-        ;;
     plugins)
         termux-wake-lock
         Run_Plugins
-        ;;
-    all|"")
-        Setup_Prerequisites
-        Check_And_Install_Packages
-        echo "--READY--"
-        Run_Plugins
-        ;;
-    *)
-        echo "Usage: $0 {setup|install|plugins|all}"
-        exit 1
         ;;
 esac
