@@ -4,6 +4,7 @@
   "bin_download": "",
   "port": 8181,
   "playlist": "http://localhost:8181/playlist.php",
+  "server_check_url": "http://localhost:8181/",
   "pkg": ["php", "git", "wget"],
   "start": "php -S localhost:8181 -t ."
 }
