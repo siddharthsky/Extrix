@@ -95,7 +95,13 @@ Run_Plugins() {
 
         ((i++))
     done
+    
+    # Create launch flag
+    touch "$HOME/.launch"
 }
+
+# Always reset launch flag on start
+rm -f "$HOME/.launch"
 
 echo "Acquiring wake lock"
 termux-wake-lock
