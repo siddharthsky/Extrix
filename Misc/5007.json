@@ -6,6 +6,7 @@
   "playlist": "http://localhost:5007/playlist.m3u",
   "server_check_url": "http://localhost:5007/play/143",
   "login_url": "http://localhost:5007",
+  "watch_url": "http://localhost:5007",
   "pkg": [],
   "start": "./run.bin run --port 5007 --public",
   "post_install_script": "https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/5007_post.sh",
