@@ -95,7 +95,9 @@ Run_Plugins() {
 
         ((i++))
     done
-    
+
+    sleep 5
+    echo "--READY__"
     # Create launch flag
     touch "$HOME/.launch"
 }
