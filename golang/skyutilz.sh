@@ -6,6 +6,9 @@ Run_Plugins() {
     export SHELL=/bin/bash
     PLUGIN_DIR="$HOME/plugins"
 
+    # Always reset launch flag on start
+    rm -f "$HOME/.launch"
+
     termux-wake-lock
 
     [ ! -d "$PLUGIN_DIR" ] && return
