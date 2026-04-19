@@ -42,7 +42,7 @@ Check_And_Install_Packages() {
           --es com.termux.execute.command "/data/data/com.termux/files/usr/bin/bash" \
           --ez com.termux.execute.background false
 
-    else
+    #else
         #echo "All required packages are already installed."
     fi
 }
