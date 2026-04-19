@@ -6,9 +6,6 @@ Run_Plugins() {
     export SHELL=/bin/bash
     PLUGIN_DIR="$HOME/plugins"
 
-    # Always reset launch flag on start
-    rm -f "$HOME/.launch"
-
     termux-wake-lock
 
     [ ! -d "$PLUGIN_DIR" ] && return
@@ -64,7 +61,9 @@ Run_Plugins() {
 Boot_System() {
     echo -e "\e[1;36m[BOOT] Initializing system...\e[0m"
 
-
+     # Always reset launch flag on start
+    rm -f "$HOME/.launch"
+    
     Run_Plugins
 
     echo -e "\e[1;32m[BOOT] System started successfully.\e[0m"
