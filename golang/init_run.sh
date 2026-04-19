@@ -88,8 +88,8 @@ Run_Plugins() {
         color=${colors[$((i % ${#colors[@]}))]}
         reset="\e[0m"
 
-        echo -e "${color}➜ Plugin running on http://localhost:$port${reset}"
-        echo "----"
+        # echo -e "${color}➜ Plugin running on http://localhost:$port${reset}"
+        # echo "----"
         echo -e "${color}➜ Plugin running on \e]8;;http://localhost:$port\ahttp://localhost:$port\e]8;;\a${reset}"
 
         # Run script silently in background
