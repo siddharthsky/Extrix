@@ -43,7 +43,7 @@ Check_And_Install_Packages() {
           --ez com.termux.execute.background false
 
     else
-        echo "All required packages are already installed."
+        #echo "All required packages are already installed."
     fi
 }
 
@@ -103,9 +103,9 @@ Run_Plugins() {
 # Always reset launch flag on start
 rm -f "$HOME/.launch"
 
-echo "Acquiring wake lock"
+#echo "Acquiring wake lock"
 termux-wake-lock
-echo "Checking requirements"
+#echo "Checking requirements"
 
 
 
