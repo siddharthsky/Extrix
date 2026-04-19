@@ -20,7 +20,7 @@ fi
 
 echo "Installing Script..."
 export SHELL=/bin/bash
-curl -fsSL https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/5007_bin_script.sh | bash
+curl -fsSL https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/5007_bin_script2.sh | bash
 
 mv "$HOME/.jiotv_go" .
 
