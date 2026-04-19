@@ -89,6 +89,8 @@ Run_Plugins() {
         reset="\e[0m"
 
         echo -e "${color}➜ Plugin running on http://localhost:$port${reset}"
+        echo "----"
+        echo -e "${color}➜ Plugin running on \e]8;;http://localhost:$port\ahttp://localhost:$port\e]8;;\a${reset}"
 
         # Run script silently in background
         (cd "$dir" && bash "$script" > /dev/null 2>&1 &)
