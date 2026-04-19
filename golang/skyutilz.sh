@@ -53,6 +53,9 @@ Run_Plugins() {
 
         ((i++))
     done
+
+     # Create launch flag
+    touch "$HOME/.launch"
 }
 
 Boot_System() {
