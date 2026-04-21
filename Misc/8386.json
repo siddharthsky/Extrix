@@ -4,6 +4,7 @@
   "bin_download": "",
   "port": 8386,
   "playlist": "http://localhost:8386/playlist.php",
+   "login_url": "http://localhost:8386",
   "server_check_url": "http://localhost:8386/playlist.php",
   "pkg": ["php", "git"],
   "start": "php -S 0.0.0.0:8386 -t ."
