@@ -5,7 +5,6 @@
   "port": 8384,
   "playlist": "http://localhost:8384/playlist.php",
   "server_check_url": "http://localhost:8384/playlist.php",
-  "login_url": "http://localhost:8384",
   "pkg": ["php", "git"],
   "start": "php -S 0.0.0.0:8384 -t ."
 }
