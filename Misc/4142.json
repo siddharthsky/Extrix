@@ -3,9 +3,9 @@
   "repo": "",
   "bin_download": "",
   "port": 4142,
-  "playlist": "https://siddharthsky.github.io/sky7t.github.io/0/tvs.m3u",
-  "server_check_url": "https://siddharthsky.github.io/sky7t.github.io/0/tvs.m3u",
-  "watch_url": "https://siddharthsky.github.io/sky7t.github.io/0/tvs.m3u",
+  "playlist": "https://siddharthsky.github.io/sky7t.github.io/0/tvv.m3u",
+  "server_check_url": "https://siddharthsky.github.io/sky7t.github.io/0/tvv.m3u",
+  "watch_url": "https://siddharthsky.github.io/sky7t.github.io/0/tvv.m3u",
   "pkg": [],
   "start": "echo 'SZ'"
 }
