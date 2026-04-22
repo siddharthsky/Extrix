@@ -1,0 +1,11 @@
+{
+  "title": "Sky7t",
+  "repo": "",
+  "bin_download": "",
+  "port": 4142,
+  "playlist": "https://siddharthsky.github.io/sky7t.github.io/0/tvs.m3u",
+  "server_check_url": "https://siddharthsky.github.io/sky7t.github.io/0/tvs.m3u",
+  "watch_url": "https://siddharthsky.github.io/sky7t.github.io/0/tvs.m3u",
+  "pkg": [],
+  "start": "echo 'SZ'"
+}
