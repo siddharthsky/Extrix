@@ -1,0 +1,11 @@
+{
+  "title": "IPTV test",
+  "repo": "",
+  "bin_download": "",
+  "port": 4141,
+  "playlist": "https://iptv-org.github.io/iptv/countries/in.m3u",
+  "server_check_url": "https://iptv-org.github.io/iptv/countries/in.m3u",
+  "watch_url": "https://iptv-org.github.io/iptv/countries/in.m3u",
+  "pkg": ["php", "git", "wget"],
+  "start": "echo 'SZ'"
+}
