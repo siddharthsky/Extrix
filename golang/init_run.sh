@@ -90,7 +90,7 @@ Run_Plugins() {
         url="http://localhost:$port"
 
         # Output terminal hyperlink with raw URL
-        echo -e "${color}  ➜ [STARTED] Plugin running on \e]8;;$url\a$url\e]8;;\a${C_RESET}"
+        echo -e "${color}[+] Plugin Active | \e]8;;$url\a$url\e]8;;\a${C_RESET}"
 
         # Run script silently in background
         (cd "$dir" && bash "$script" > /dev/null 2>&1 &)
@@ -100,7 +100,7 @@ Run_Plugins() {
     done
     
     if [ "$started_count" -eq 0 ]; then
-        echo -e "${C_SOFT_BLUE}  [i] All plugins are currently running.${C_RESET}"
+        echo -e "${C_SOFT_BLUE}[*] All plugins are currently running.${C_RESET}"
     fi
     echo "" # Spacing
     
@@ -115,9 +115,7 @@ termux-wake-lock
 
 Setup_Prerequisites
 Check_And_Install_Packages
-Run_Plugins
 
-# Aesthetic Ready Banner
-echo -e "${C_SAKURA_PINK}━・━・━・━・━・━・━・━・━・━・━・━${C_RESET}"
-echo -e "${C_DEEP_PINK}        ✨ --READY-- ✨${C_RESET}"
-echo -e "${C_SAKURA_PINK}━・━・━・━・━・━・━・━・━・━・━・━${C_RESET}\n"
+echo -e "${C_DEEP_PINK}--READY-- ${C_RESET}"
+
+Run_Plugins
