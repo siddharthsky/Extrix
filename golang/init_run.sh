@@ -100,9 +100,9 @@ Run_Plugins() {
     done
     
     if [ "$started_count" -eq 0 ]; then
+        echo "" # Spacing
         echo -e "${C_SOFT_BLUE}[*] All plugins are currently running.${C_RESET}"
     fi
-    echo "" # Spacing
     
     # Create launch flag
     touch "$HOME/.launch"
