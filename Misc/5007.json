@@ -10,5 +10,6 @@
   "pkg": [],
   "start": "./run.bin run --port 5007 --public",
   "post_install_script": "https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/5007_post.sh",
+  "updatable": true,
   "_note": "Do not rename 'run.bin'; it is hardcoded and must be used as-is. Add arguments to the start command if needed. "
 }
