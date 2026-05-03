@@ -105,8 +105,8 @@ install_plugin
 # Ensure local plugin folder exists
 mkdir -p "$PLUGIN_DIR/bin"
 
-# Remove old install if exists
-rm -rf "$PLUGIN_DIR"
+# # Remove old install if exists
+# rm -rf "$PLUGIN_DIR"
 
 # Place binary
 mv -f "$HOME/.jiotv_go/bin/jiotv_go" "$BINARY_PATH"
