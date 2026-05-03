@@ -29,7 +29,7 @@ fi
 
 echo "Using Port: $PORT"
 
-INSTALL_URL="https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/5007_bin_script2.sh"
+INSTALL_URL="https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/5010_bin_script.sh"
 PROJECT_DIR="$(pwd)"
 PLUGIN_DIR="$PROJECT_DIR/.jiotv_go"
 BINARY_PATH="$PLUGIN_DIR/bin/jiotv_go"
