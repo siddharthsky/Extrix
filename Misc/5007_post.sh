@@ -102,14 +102,11 @@ echo "Installing Plugin..."
 
 install_plugin
 
-# Ensure local plugin folder exists
-mkdir -p "$PLUGIN_DIR/bin"
-
 # Remove old install if exists
 rm -rf "$PLUGIN_DIR"
 
-# Place binary
-mv -f "$HOME/.jiotv_go/bin/jiotv_go" "$BINARY_PATH"
+# Move fresh install locally
+mv "$HOME/.jiotv_go" "$PLUGIN_DIR"
 
 # Create symlink
 ln -sf "$BINARY_PATH" "$RUN_BIN"
