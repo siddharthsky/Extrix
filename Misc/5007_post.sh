@@ -43,7 +43,7 @@ create_launcher() {
   cat > "$LAUNCH_SCRIPT" <<EOF
 #!/bin/bash
 cd "$PROJECT_DIR"
-./run.bin run --port $PORT
+./run.bin run --port $PORT --public
 EOF
 
   chmod +x "$LAUNCH_SCRIPT"
