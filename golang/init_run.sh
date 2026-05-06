@@ -103,6 +103,11 @@ Run_Plugins() {
     touch "$HOME/.launch"
 }
 
+
+
+
+
+
 if [ "$RESTART_REQUIRED" = true ]; then
     echo -e "${C_SOFT_GREEN}[✓] Switching to fresh session...${C_RESET}"
     
@@ -112,9 +117,14 @@ if [ "$RESTART_REQUIRED" = true ]; then
       --es com.termux.execute.cwd "$HOME" \
       --es com.termux.execute.command "/data/data/com.termux/files/usr/bin/bash" \
       --ez com.termux.execute.background false
-
-    exit 0 
 fi
+
+
+
+
+
+
+
 
 # Always reset launch flag on start
 rm -f "$HOME/.launch"
