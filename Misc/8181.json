@@ -1,7 +1,6 @@
 {
   "title": "DRM Live",
   "repo": "https://github.com/drmlive/tataplay",
-  "bin_download": "",
   "port": 8181,
   "playlist": "http://localhost:8181/playlist.php",
   "server_check_url": "http://localhost:8181",
