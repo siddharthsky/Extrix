@@ -45,7 +45,12 @@ Check_And_Install_Packages() {
         chmod 755 $HOME/.termux/termux.properties
         echo "allow-external-apps = true" >> $HOME/.termux/termux.properties
 
-       RESTART_REQUIRED=true
+        am startservice \
+          -n com.termux/.app.TermuxService \
+          -a com.termux.service_execute \
+          --es com.termux.execute.cwd "$HOME" \
+          --es com.termux.execute.command "/data/data/com.termux/files/usr/bin/bash" \
+          --ez com.termux.execute.background false
     fi
 }
 
@@ -102,29 +107,6 @@ Run_Plugins() {
     # Create launch flag
     touch "$HOME/.launch"
 }
-
-
-
-
-
-
-if [ "$RESTART_REQUIRED" = true ]; then
-    echo -e "${C_SOFT_GREEN}[✓] Switching to fresh session...${C_RESET}"
-    
-    am startservice \
-      -n com.termux/.app.TermuxService \
-      -a com.termux.service_execute \
-      --es com.termux.execute.cwd "$HOME" \
-      --es com.termux.execute.command "/data/data/com.termux/files/usr/bin/bash" \
-      --ez com.termux.execute.background false
-fi
-
-
-
-
-
-
-
 
 # Always reset launch flag on start
 rm -f "$HOME/.launch"
