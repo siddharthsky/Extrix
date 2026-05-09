@@ -2,6 +2,6 @@
   "title": "Jupyter Notebook",
   "port": 7001,
   "playlist": "http://localhost:7001",
-  "post_install_script": "https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/7001_post.sh",
+  "post_install_script": "https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/9001_post.sh",
   "start": "jupyter notebook --port=7001"
 }
