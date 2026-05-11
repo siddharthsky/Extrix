@@ -64,7 +64,7 @@ Check_And_Install_Packages() {
         echo -e "${C_SOFT_GREEN}[✓] Packages installed and cache cleared successfully. Applying settings...${C_RESET}"
 
         termux-reload-settings
-        wait_for_pkg_lock
+        Wait_For_Apt_Stable
         hash -r 
         sleep 1
     fi
@@ -125,17 +125,21 @@ Run_Plugins() {
     touch "$HOME/.launch"
 }
 
-wait_for_pkg_lock() {
-    while fuser /data/data/com.termux/files/usr/var/lib/dpkg/lock >/dev/null 2>&1; do
-        echo "Waiting for package manager to settle..."
-        sleep 1
+Wait_For_Apt_Stable() {
+    while pgrep -f "apt|dpkg" >/dev/null 2>&1; do
+        echo "[*] Waiting for package manager to stabilize..."
+        sleep 2
     done
+
+    # extra safety delay (Termux-specific)
+    sleep 2
 }
+
 
 # Always reset launch flag on start
 rm -f "$HOME/.launch"
 
-termux-wake-lock 2>/dev/null || true
+termux-wake-lock
 
 Setup_Prerequisites
 Check_And_Install_Packages
