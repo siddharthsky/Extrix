@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REQUIRED_PACKAGES=(php git wget)
+REQUIRED_PACKAGES=(php wget)
 
 C_SAKURA_PINK="\e[38;2;255;183;197m"
 C_DEEP_PINK="\e[38;2;255;105;180m"
