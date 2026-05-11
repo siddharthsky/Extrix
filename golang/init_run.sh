@@ -16,7 +16,6 @@ Setup_Prerequisites() {
     mkdir -p "$HOME/.termux"
     local PROP_FILE="$HOME/.termux/termux.properties"
 
-    # Safely append if it doesn't exist
     if [ ! -f "$PROP_FILE" ] || ! grep -q "allow-external-apps = true" "$PROP_FILE"; then
         echo "allow-external-apps = true" >> "$PROP_FILE"
         chmod 755 "$PROP_FILE"
@@ -42,12 +41,10 @@ Check_And_Install_Packages() {
         while [ $attempt -le $max_retries ]; do
             echo -e "${C_SOFT_BLUE}[*] Installation attempt $attempt of $max_retries...${C_RESET}\n"
             
-            # Show output during update and install
             pkg update -y
             if pkg install -y "${missing_pkgs[@]}"; then
                 success=true
                 
-                # Clean up cached package files silently
                 pkg clean >/dev/null 2>&1
                 break
             else
@@ -62,14 +59,12 @@ Check_And_Install_Packages() {
             exit 1
         fi
 
-        # Clear the messy installation output from the screen
         clear
 
         echo -e "${C_SOFT_GREEN}[✓] Packages installed and cache cleared successfully. Applying settings...${C_RESET}"
 
         termux-reload-settings
-        
-        # Clear Bash's command cache so it immediately recognizes newly installed binaries
+        wait_for_pkg_lock
         hash -r 
         sleep 1
     fi
@@ -80,7 +75,6 @@ Run_Plugins() {
 
     [ ! -d "$PLUGIN_DIR" ] && return
 
-    # Use sort -n to ensure plugin startup order is defined (numerically)
     local plugin_dirs=$(find "$PLUGIN_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -n)
     [ -z "$plugin_dirs" ] && return
 
@@ -93,10 +87,8 @@ Run_Plugins() {
     echo "$plugin_dirs" | while read -r dir; do
         local port=$(basename "$dir")
 
-        # 1. Is it a number?
         [[ ! "$port" =~ ^[0-9]+$ ]] && continue
 
-        # 2. Is it a valid unprivileged port?
         if (( port < 1024 || port > 65535 )); then
             echo -e "${C_CHERRY}  [!] Invalid port directory ($port). Must be 1024-65535. Skipping.${C_RESET}"
             continue
@@ -105,25 +97,20 @@ Run_Plugins() {
         local script="$dir/$port.sh"
         local log_file="$dir/$port.log"
 
-        # Skip if script not found
         [ ! -f "$script" ] && continue
 
-        # Skip if already running
         if lsof -i :$port >/dev/null 2>&1; then
             echo -e "${C_SOFT_GREEN}  [✓] Port $port is already active.${C_RESET}"
             continue
         fi
 
-        # Pick color (cycle)
         local color=${colors[$((i % ${#colors[@]}))]}
         local url="http://localhost:$port"
 
         echo -e "${color}[+] Plugin Active | \e]8;;$url\a$url\e]8;;\a${C_RESET}"
         
-        # Delete previous log file to start fresh
         rm -f "$log_file"
 
-        # Run script silently in background, pipe all output to log file
         (cd "$dir" && bash "$script" > "$log_file" 2>&1 &)
 
         ((i++))
@@ -135,14 +122,19 @@ Run_Plugins() {
         echo -e "${C_SOFT_BLUE}[*] All plugins are currently running.${C_RESET}"
     fi
     
-    # Create launch flag
     touch "$HOME/.launch"
+}
+
+wait_for_pkg_lock() {
+    while fuser /data/data/com.termux/files/usr/var/lib/dpkg/lock >/dev/null 2>&1; do
+        echo "Waiting for package manager to settle..."
+        sleep 1
+    done
 }
 
 # Always reset launch flag on start
 rm -f "$HOME/.launch"
 
-# Ensure wake lock doesn't fail if the package isn't loaded properly
 termux-wake-lock 2>/dev/null || true
 
 Setup_Prerequisites
