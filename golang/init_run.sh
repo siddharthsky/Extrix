@@ -118,8 +118,8 @@ Run_Plugins() {
         local color=${colors[$((i % ${#colors[@]}))]}
         local url="http://localhost:$port"
 
-        echo -e "${color}[+] Plugin Active | \e]8;;$url\a$url\e]8;;\a (Logs: $port.log)${C_RESET}"
-
+        echo -e "${color}[+] Plugin Active | \e]8;;$url\a$url\e]8;;\a${C_RESET}"
+        
         # Delete previous log file to start fresh
         rm -f "$log_file"
 
