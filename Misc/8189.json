@@ -1,10 +1,9 @@
 {
   "title": "Tata Play Clear Key",
   "repo": "https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/tataplay-clearkey.zip",
-  "bin_download": "",
   "port": 8189,
   "playlist": "http://localhost:8189/playlist.php",
   "server_check_url": "http://localhost:8189/playlist.php",
-  "pkg": ["php", "git"],
+  "login_url": "http://localhost:8189",
   "start": "php -S 0.0.0.0:8189 -t ."
 }
