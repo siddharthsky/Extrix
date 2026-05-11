@@ -131,7 +131,6 @@ Wait_For_Apt_Stable() {
         sleep 2
     done
 
-    # extra safety delay (Termux-specific)
     sleep 2
 }
 
