@@ -1,15 +1,8 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/bin/bash
 
-set -euo pipefail
-
-# =========================================================
-# Required Packages
-# =========================================================
+# Required packages
 REQUIRED_PACKAGES=(php wget lsof)
 
-# =========================================================
-# Colors
-# =========================================================
 C_SAKURA_PINK="\e[38;2;255;183;197m"
 C_DEEP_PINK="\e[38;2;255;105;180m"
 C_CHERRY="\e[38;2;192;32;88m"
@@ -17,68 +10,20 @@ C_SOFT_BLUE="\e[38;2;176;224;230m"
 C_SOFT_GREEN="\e[38;2;143;188;143m"
 C_WHITE="\e[38;2;248;248;255m"
 C_RESET="\e[0m"
+# --------------------------------------------------------
 
-# =========================================================
-# Paths
-# =========================================================
-TERMUX_DIR="$HOME/.termux"
-PROP_FILE="$TERMUX_DIR/termux.properties"
-PLUGIN_DIR="$HOME/plugins"
-LAUNCH_FLAG="$HOME/.launch"
-
-# =========================================================
-# Cleanup on Exit
-# =========================================================
-Cleanup() {
-    if command -v termux-wake-unlock >/dev/null 2>&1; then
-        termux-wake-unlock >/dev/null 2>&1 || true
-    fi
-}
-
-trap Cleanup EXIT
-
-# =========================================================
-# Logging Helpers
-# =========================================================
-Info() {
-    echo -e "${C_SOFT_BLUE}[*] $1${C_RESET}"
-}
-
-Success() {
-    echo -e "${C_SOFT_GREEN}[✓] $1${C_RESET}"
-}
-
-Warn() {
-    echo -e "${C_CHERRY}[!] $1${C_RESET}"
-}
-
-# =========================================================
-# Setup Termux Prerequisites
-# =========================================================
 Setup_Prerequisites() {
+    mkdir -p "$HOME/.termux"
+    local PROP_FILE="$HOME/.termux/termux.properties"
 
-    mkdir -p "$TERMUX_DIR"
-
-    if [ ! -f "$PROP_FILE" ]; then
-        touch "$PROP_FILE"
-    fi
-
-    if ! grep -q "^allow-external-apps *= *true" "$PROP_FILE" 2>/dev/null; then
+    # Safely append if it doesn't exist
+    if [ ! -f "$PROP_FILE" ] || ! grep -q "allow-external-apps = true" "$PROP_FILE"; then
         echo "allow-external-apps = true" >> "$PROP_FILE"
-    fi
-
-    chmod 644 "$PROP_FILE"
-
-    if command -v termux-reload-settings >/dev/null 2>&1; then
-        termux-reload-settings >/dev/null 2>&1 || true
+        chmod 755 "$PROP_FILE"
     fi
 }
 
-# =========================================================
-# Check & Install Packages
-# =========================================================
 Check_And_Install_Packages() {
-
     local missing_pkgs=()
 
     for pkg in "${REQUIRED_PACKAGES[@]}"; do
@@ -87,187 +32,122 @@ Check_And_Install_Packages() {
         fi
     done
 
-    if [ ${#missing_pkgs[@]} -eq 0 ]; then
-        return
-    fi
+    if [ ${#missing_pkgs[@]} -gt 0 ]; then
+        echo -e "\n${C_CHERRY}[!] Installing missing dependencies: ${missing_pkgs[*]}${C_RESET}"
+        
+        local max_retries=3
+        local attempt=1
+        local success=false
 
-    Warn "Installing missing packages: ${missing_pkgs[*]}"
+        while [ $attempt -le $max_retries ]; do
+            echo -e "${C_SOFT_BLUE}[*] Installation attempt $attempt of $max_retries...${C_RESET}\n"
+            
+            # Show output during update and install
+            pkg update -y
+            if pkg install -y "${missing_pkgs[@]}"; then
+                success=true
+                
+                # Clean up cached package files silently
+                pkg clean >/dev/null 2>&1
+                break
+            else
+                echo -e "\n${C_CHERRY}[!] Installation failed. Retrying in 3 seconds...${C_RESET}"
+                sleep 3
+                ((attempt++))
+            fi
+        done
 
-    pkg update -y || {
-        Warn "Failed to update package lists."
-        exit 1
-    }
-
-    pkg install -y "${missing_pkgs[@]}" || {
-        Warn "Package installation failed."
-        exit 1
-    }
-
-    pkg clean
-
-    Success "Packages installed successfully."
-
-    Setup_Prerequisites
-
-    Info "Restarting fresh Termux session..."
-
-    am startservice \
-      -n com.termux/.app.TermuxService \
-      -a com.termux.service_execute \
-      --es com.termux.execute.cwd "$HOME" \
-      --es com.termux.execute.command "$PREFIX/bin/bash" \
-      --ez com.termux.execute.background false >/dev/null 2>&1 || {
-        Warn "Failed to restart Termux session."
-        exit 1
-    }
-
-    # CRITICAL: Prevent duplicate execution
-    exit 0
-}
-
-# =========================================================
-# Validate Port
-# =========================================================
-Is_Valid_Port() {
-
-    local port="$1"
-
-    [[ "$port" =~ ^[0-9]+$ ]] || return 1
-
-    (( port >= 1024 && port <= 65535 ))
-}
-
-# =========================================================
-# Check if Port Already Active
-# =========================================================
-Is_Port_Running() {
-
-    local port="$1"
-
-    lsof -i :"$port" >/dev/null 2>&1
-}
-
-# =========================================================
-# Start Single Plugin
-# =========================================================
-Start_Plugin() {
-
-    local dir="$1"
-    local port
-    local script
-    local logfile
-    local url
-
-    port="$(basename "$dir")"
-
-    Is_Valid_Port "$port" || {
-        Warn "Skipping invalid port: $port"
-        return
-    }
-
-    script="$dir/$port.sh"
-
-    [ -f "$script" ] || {
-        Warn "Missing plugin script: $script"
-        return
-    }
-
-    if Is_Port_Running "$port"; then
-        Success "Port $port already active."
-        return
-    fi
-
-    logfile="$dir/plugin.log"
-    url="http://localhost:$port"
-
-    (
-        cd "$dir" || exit 1
-        bash "$script" > "$logfile" 2>&1
-    ) &
-
-    local pid=$!
-
-    # Wait for startup
-    local attempts=0
-    local max_attempts=10
-
-    while [ $attempts -lt $max_attempts ]; do
-
-        if Is_Port_Running "$port"; then
-            echo -e "${C_SAKURA_PINK}[+] Plugin Active | \e]8;;$url\a$url\e]8;;\a${C_RESET}"
-            return
+        if [ "$success" = false ]; then
+            echo -e "\n${C_DEEP_PINK}[✖] Fatal Error: Could not install packages. Check internet connection. Aborting.${C_RESET}"
+            exit 1
         fi
 
+        # Clear the messy installation output from the screen
+        clear
+
+        echo -e "${C_SOFT_GREEN}[✓] Packages installed and cache cleared successfully. Applying settings...${C_RESET}"
+
+        termux-reload-settings
+        
+        # Clear Bash's command cache so it immediately recognizes newly installed binaries
+        hash -r 
         sleep 1
-        ((attempts++))
-    done
-
-    Warn "Plugin on port $port failed to start."
-    Warn "Check log: $logfile"
-
-    kill "$pid" >/dev/null 2>&1 || true
+    fi
 }
 
-# =========================================================
-# Run Plugins
-# =========================================================
 Run_Plugins() {
+    local PLUGIN_DIR="$HOME/plugins"
 
-    [ -d "$PLUGIN_DIR" ] || {
-        Info "No plugin directory found."
-        return
-    }
+    [ ! -d "$PLUGIN_DIR" ] && return
 
-    mapfile -t plugin_dirs < <(
-        find "$PLUGIN_DIR" \
-            -mindepth 1 \
-            -maxdepth 1 \
-            -type d | sort
-    )
+    # Use sort -n to ensure plugin startup order is defined (numerically)
+    local plugin_dirs=$(find "$PLUGIN_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -n)
+    [ -z "$plugin_dirs" ] && return
 
-    [ ${#plugin_dirs[@]} -eq 0 ] && {
-        Info "No plugins found."
-        return
-    }
+    echo -e "\n${C_DEEP_PINK}🌸 Starting Plugin Servers...${C_RESET}\n"
 
-    echo
-    echo -e "${C_DEEP_PINK}🌸 Starting Plugin Servers...${C_RESET}"
-    echo
-
+    local colors=( "$C_SAKURA_PINK" "$C_SOFT_BLUE" "$C_WHITE" )
+    local i=0
     local started_count=0
 
-    for dir in "${plugin_dirs[@]}"; do
-        Start_Plugin "$dir"
+    echo "$plugin_dirs" | while read -r dir; do
+        local port=$(basename "$dir")
+
+        # 1. Is it a number?
+        [[ ! "$port" =~ ^[0-9]+$ ]] && continue
+
+        # 2. Is it a valid unprivileged port?
+        if (( port < 1024 || port > 65535 )); then
+            echo -e "${C_CHERRY}  [!] Invalid port directory ($port). Must be 1024-65535. Skipping.${C_RESET}"
+            continue
+        fi
+
+        local script="$dir/$port.sh"
+        local log_file="$dir/$port.log"
+
+        # Skip if script not found
+        [ ! -f "$script" ] && continue
+
+        # Skip if already running
+        if lsof -i :$port >/dev/null 2>&1; then
+            echo -e "${C_SOFT_GREEN}  [✓] Port $port is already active.${C_RESET}"
+            continue
+        fi
+
+        # Pick color (cycle)
+        local color=${colors[$((i % ${#colors[@]}))]}
+        local url="http://localhost:$port"
+
+        echo -e "${color}[+] Plugin Active | \e]8;;$url\a$url\e]8;;\a (Logs: $port.log)${C_RESET}"
+
+        # Delete previous log file to start fresh
+        rm -f "$log_file"
+
+        # Run script silently in background, pipe all output to log file
+        (cd "$dir" && bash "$script" > "$log_file" 2>&1 &)
+
+        ((i++))
         ((started_count++))
     done
-
-    echo
-
+    
     if [ "$started_count" -eq 0 ]; then
-        Info "All plugins are already running."
-    else
-        Success "$started_count plugin(s) processed."
+        echo ""
+        echo -e "${C_SOFT_BLUE}[*] All plugins are currently running.${C_RESET}"
     fi
-
-    touch "$LAUNCH_FLAG"
+    
+    # Create launch flag
+    touch "$HOME/.launch"
 }
 
-# =========================================================
-# Main
-# =========================================================
+# Always reset launch flag on start
+rm -f "$HOME/.launch"
 
-rm -f "$LAUNCH_FLAG"
-
-if command -v termux-wake-lock >/dev/null 2>&1; then
-    termux-wake-lock >/dev/null 2>&1 || true
-fi
+# Ensure wake lock doesn't fail if the package isn't loaded properly
+termux-wake-lock 2>/dev/null || true
 
 Setup_Prerequisites
-
 Check_And_Install_Packages
 
-echo
-echo -e "${C_DEEP_PINK}--READY--${C_RESET}"
-echo
+echo -e "${C_DEEP_PINK}--READY-- ${C_RESET}"
 
 Run_Plugins
