@@ -10,6 +10,60 @@ C_SOFT_BLUE="\e[38;2;176;224;230m"
 C_SOFT_GREEN="\e[38;2;143;188;143m"
 C_WHITE="\e[38;2;248;248;255m"
 C_RESET="\e[0m"
+
+MIRRORS=(
+"https://packages.termux.dev/apt/termux-main"
+"https://mirrors.in.sahilister.net/termux/termux-main/ stable main"
+"https://linux.domainesia.com/applications/termux/termux-main"
+"http://mirror.mephi.ru/termux/termux-main"
+)
+
+# --------------------------------------------------------
+# Mirror Selection
+measure_latency() {
+    local base_url="$1"
+    local host=$(echo "$base_url" | awk -F/ '{print $3}')
+
+    local t
+    t=$(curl -o /dev/null -s -w "%{time_total}" \
+        --max-time 5 "$base_url/dists/stable/Release")
+
+    if [[ $? -eq 0 && -n "$t" ]]; then
+        echo "$t $base_url"
+        return
+    fi
+
+    local ping_avg
+    ping_avg=$(ping -c 2 -W 2 "$host" 2>/dev/null \
+        | tail -1 | awk -F '/' '{print $5}')
+
+    if [[ -n "$ping_avg" ]]; then
+        awk "BEGIN {print $ping_avg/1000 \" $base_url\"}"
+        return
+    fi
+
+    echo "999 $base_url"
+}
+
+select_best_mirror() {
+    local tmp
+    tmp=$(mktemp)
+
+    for m in "${MIRRORS[@]}"; do
+        measure_latency "$m" >> "$tmp"
+    done
+
+    sort -n "$tmp" | head -n 1 | awk '{print $2}'
+    rm -f "$tmp"
+}
+
+apply_mirror() {
+    local mirror="$1"
+
+    echo "deb $mirror stable main" > "$PREFIX/etc/apt/sources.list"
+    rm -rf "$PREFIX/etc/apt/sources.list.d/"*
+}
+
 # --------------------------------------------------------
 
 Setup_Prerequisites() {
@@ -40,16 +94,21 @@ Check_And_Install_Packages() {
 
         while [ $attempt -le $max_retries ]; do
             echo -e "${C_SOFT_BLUE}[*] Installation attempt $attempt of $max_retries...${C_RESET}\n"
-            
+        
+            best_mirror=$(select_best_mirror)
+            apply_mirror "$best_mirror"
+        
+            echo -e "${C_WHITE}[+] Using mirror: $best_mirror${C_RESET}"
+        
             pkg update -y
+        
             if pkg install -y "${missing_pkgs[@]}"; then
                 success=true
-                
                 pkg clean >/dev/null 2>&1
                 break
             else
-                echo -e "\n${C_CHERRY}[!] Installation failed. Retrying in 3 seconds...${C_RESET}"
-                sleep 3
+                echo -e "${C_CHERRY}[!] Failed with selected mirror. Switching next best...${C_RESET}"
+                sleep 2
                 ((attempt++))
             fi
         done
