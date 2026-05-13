@@ -70,6 +70,9 @@ Check_And_Install_Packages() {
         termux-reload-settings
         Wait_For_Apt_Stable
         hash -r 
+        
+        touch "$HOME/.CTxEngine"
+        
         sleep 1
     fi
 }
