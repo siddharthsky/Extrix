@@ -1,0 +1,10 @@
+{
+  "title": "DRM LiveX",
+  "repo": "https://github.com/drmlive/tataplay",
+  "port": 9009,
+  "playlist": "http://192.168.1.8:5001/playlist.m3u",
+  "server_check_url": "http://192.168.1.8:5001",
+  "login_url": "http://192.168.1.8:5001",
+  "pkg": ["php", "git", "wget"],
+  "start": "php -S 0.0.0.0:5001 -t ."
+}
