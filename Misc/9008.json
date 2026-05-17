@@ -1,0 +1,8 @@
+{
+  "title": "ttyd",
+  "repo": "https://github.com/tsl0922/ttyd",
+  "bin_download": "empty_url",
+  "port": 9008,
+  "start": "ttyd -p 9008 bash",
+  "post_install_script": "https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/9008.sh"
+}
