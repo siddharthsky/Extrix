@@ -1,0 +1,10 @@
+{
+  "title": "gotty",
+  "tool": true,
+  "repo": "https://github.com/yudai/gotty",
+  "bin_download": "empty_url",
+  "playlist": "http://localhost:9006/",
+  "port": 9006,
+  "start": "gotty -p 9006 bash",
+  "post_install_script": "pkg install gotty -y\necho 'gotty installed successfully!'\nsleep 5"
+}
