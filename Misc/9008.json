@@ -1,5 +1,6 @@
 {
   "title": "ttyd",
+  "tool": true,
   "repo": "https://github.com/tsl0922/ttyd",
   "bin_download": "empty_url",
   "app_start_url": "http://localhost:9008/",
