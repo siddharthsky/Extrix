@@ -1,0 +1,1 @@
+capstone libc++ libandroid-glob libandroid-support libbz2 libcurl libffi libgmp libiconv libicu libidn2 libnghttp2 libpsl libresolv-wrapper libsqlite libssh2 libunistring libuuid libxml2 libxslt libzip oniguruma openssl pcre2 php readline tidy wget zlib
