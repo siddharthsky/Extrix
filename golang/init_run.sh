@@ -66,6 +66,8 @@ Check_And_Install_Packages() {
 
         clear
         echo -e "${C_SOFT_GREEN}[✓] Packages installed successfully.${C_RESET}"
+        echo -e "${C_SOFT_GREEN}[✓] Open ${C_YELLOW}Plugin Manager${C_SOFT_GREEN} to install and manage plugins.${C_RESET}"
+        echo -e "${C_SOFT_GREEN}[✓] Add your preferred plugins to get started.${C_RESET}"
 
         termux-reload-settings
         Wait_For_Apt_Stable
