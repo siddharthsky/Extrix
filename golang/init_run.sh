@@ -66,7 +66,7 @@ Check_And_Install_Packages() {
 
         clear
         echo -e "${C_SOFT_GREEN}[✓] Packages installed successfully.${C_RESET}"
-        echo -e "${C_SOFT_GREEN}[✓] Open ${C_SAKURA_PINK}Plugin Manager${C_RESET} to install plugins.${C_RESET}"
+        echo -e "${C_SOFT_GREEN}[✓] Open ${C_SAKURA_PINK}Plugin Manager${C_SOFT_GREEN} to install plugins.${C_RESET}"
         echo -e "${C_SOFT_GREEN}[✓] Add plugins to get started.${C_RESET}"
 
         termux-reload-settings
