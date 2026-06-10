@@ -5,5 +5,6 @@
   "playlist": "http://localhost:8183/Playlist.php",
   "server_check_url": "http://localhost:8183/",
   "login_url": "http://localhost:8183/login.php",
+  "support_url": "https://github.com/DenverIsAlive/denverisalive.github.io/tree/main/Script",
   "start": "php -S 0.0.0.0:8183 -t ."
 }
