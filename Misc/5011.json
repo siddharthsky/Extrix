@@ -1,0 +1,10 @@
+{
+  "title": "Stalker-Portal",
+  "repo": "https://github.com/Jitendraunatti/Stalker-Portal",
+  "port": 5011,
+  "playlist": "http://localhost:5011/playlist.php",
+  "server_check_url": "http://localhost:5011",
+  "login_url": "http://localhost:5011",
+  "pkg": ["php", "git", "wget"],
+  "start": "php -S 0.0.0.0:5011 -t ."
+}
