@@ -1,0 +1,9 @@
+{
+  "title": "Tata Play [LazyyXD]",
+  "repo": "https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/builds/tp_rm.zip",
+  "port": 8184,
+  "playlist": "http://localhost:8184/playlist.php",
+  "server_check_url": "http://localhost:8184/",
+  "login_url": "http://localhost:8184/login.php",
+  "start": "php -S 0.0.0.0:8184 -t ."
+}
