@@ -1,0 +1,6 @@
+{
+  "title": "FIFA Temp",
+  "port": 8188,
+  "playlist": "https://siddharthsky.github.io/sky7t.github.io/0/tv_fifa.m3u",
+  "login_url": "http://localhost:8188",
+}
