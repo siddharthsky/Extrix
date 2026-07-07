@@ -1,9 +1,7 @@
 {
-  "title": "DRM Live [Modified]",
-  "repo": "https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/Misc/tataplug.zip",
-  "port": 8181,
-  "playlist": "http://localhost:8181/playlist.php",
-  "server_check_url": "http://localhost:8181/",
-  "login_url": "http://localhost:8181",
-  "start": "php -S 0.0.0.0:8181 -t ."
+  "title": "DRM Live Pro",
+  "port": 8182,
+  "playlist": "https://la.drmlive.net/tp/playlist",
+  "playlist_h": true,
+  "support_url": "ttps://t.me/+rQTz5VL8CRpjNTZl"
 }
