@@ -65,7 +65,9 @@ echo "Step 2: Identified processor architecture as $ARCH"
 
 # Step 3: Fetch the latest binary
 #https://github.com/JioTV-Go/jiotv_go/releases/download/v3.17.0/jiotv_go-android-arm64
-BINARY_URL="https://github.com/JioTV-Go/jiotv_go/releases/download/v3.16.3/jiotv_go-$OS-$ARCH"
+#https://github.com/JioTV-Go/jiotv_go/releases/tag/develop.2026.08.05.17.12
+#BINARY_URL="https://github.com/JioTV-Go/jiotv_go/releases/download/v3.16.3/jiotv_go-$OS-$ARCH"
+BINARY_URL="https://github.com/JioTV-Go/jiotv_go/releases/download/develop.2026.08.05.17.12/jiotv_go-$OS-$ARCH"
 echo "Step 3: Fetching the latest binary from $BINARY_URL"
 # If any existing binary is present, delete it
 if [[ -f "jiotv_go" ]]; then
