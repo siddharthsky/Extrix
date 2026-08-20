@@ -1,0 +1,10 @@
+{
+  "title": "JioTV+ Proxy Localhost",
+  "repo": "https://github.com/lazyop/JioTV-Localhost",
+  "port": 5012,
+  "playlist": "http://localhost:5012/playlist.php",
+  "server_check_url": "http://localhost:5012",
+  "login_url": "http://localhost:5012",
+  "pkg": ["php", "git", "wget"],
+  "start": "php -S 0.0.0.0:5012 -t ."
+}
