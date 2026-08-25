@@ -1,0 +1,10 @@
+{
+  "title": "Tata Play [DenverIsAlive]",
+  "repo": "https://github.com/siddharthsky/Extrix/raw/refs/heads/main/Misc/zips/mnm.zip",
+  "port": 5013,
+  "playlist": "http://localhost:5013/playlist.php",
+  "server_check_url": "http://localhost:5013/",
+  "login_url": "http://localhost:5013/login.html",
+  "support_url": "https://github.com/DenverIsAlive/denverisalive.github.io/tree/main/Script",
+  "start": "php -S 0.0.0.0:5013 -t ."
+}
