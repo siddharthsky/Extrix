@@ -1,6 +1,6 @@
 {
   "title": "Movy.sx",
-  "port": 4148,
+  "port": 4145,
   "server_check_url": "https://www.movy.sx/",
   "watch_url": "https://www.movy.sx/"
 }
