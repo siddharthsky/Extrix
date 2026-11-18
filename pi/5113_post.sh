@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-DEB_URL="https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/pi/jtv-server_1.5.7_arm.deb"
-DEB_FILE="jtv-server_1.5.7_arm.deb"
+DEB_URL="https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/pi/jtvs-1.5.7-aarch64.deb"
+DEB_FILE="jtvs-1.5.7-aarch64.deb"
 
 echo "[1/3] Updating Termux packages (silent)..."
 pkg update -y
