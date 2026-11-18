@@ -1,0 +1,12 @@
+{
+  "title": "JTV 1.5.7",
+  "repo": "https://github.com/F-e-n-y-x/JioTV-AndroidTV-",
+  "port": 5113,
+  "playlist": "https://localhost:8443/playlist.m3u?epg=1&catchup=1&hd=1",
+  "server_check_url": "http://localhost:8443",
+  "login_url": "http://localhost:8443",
+  "pkg": ["php", "git", "wget"],
+  "post_install_script": "https://raw.githubusercontent.com/siddharthsky/Extrix/refs/heads/main/pi/5113_post.sh",
+  "uninstall_script": "pkg uninstall jtv-server -y\necho 'jtv-server uninstalled successfully!'\nsleep 5",
+  "start": "jtv-server"
+}
