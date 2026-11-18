@@ -1,6 +1,7 @@
 {
   "title": "JTV 1.5.7",
   "repo": "https://github.com/F-e-n-y-x/JioTV-AndroidTV-",
+  "bin_download": "empty_url",
   "port": 5113,
   "playlist": "https://localhost:8443/playlist.m3u?epg=1&catchup=1&hd=1",
   "server_check_url": "http://localhost:8443",
