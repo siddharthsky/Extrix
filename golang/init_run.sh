@@ -79,6 +79,22 @@ Check_And_Install_Packages() {
     fi
 }
 
+Show_Migration_Banner() {
+    echo -e "\n${C_DEEP_PINK}╔══════════════════════════════════════════════════════╗${C_RESET}"
+    echo -e "${C_DEEP_PINK}║${C_RESET}   ${C_SAKURA_PINK}⚠ IMPORTANT: BACKUP YOUR CTx ENGINE DATA${C_RESET}           ${C_DEEP_PINK}║${C_RESET}"
+    echo -e "${C_DEEP_PINK}╠══════════════════════════════════════════════════════╣${C_RESET}"
+    echo -e "${C_DEEP_PINK}║${C_RESET} ${C_WHITE}We are soon moving to a new package name & signature${C_RESET} ${C_DEEP_PINK}║${C_RESET}"
+    echo -e "${C_DEEP_PINK}║${C_RESET} ${C_WHITE}due to the Termux shared package name issue. Because${C_RESET} ${C_DEEP_PINK}║${C_RESET}"
+    echo -e "${C_DEEP_PINK}║${C_RESET} ${C_WHITE}of this change, this version cannot be updated and${C_RESET}   ${C_DEEP_PINK}║${C_RESET}"
+    echo -e "${C_DEEP_PINK}║${C_RESET} ${C_WHITE}will stop receiving updates.${C_RESET}                         ${C_DEEP_PINK}║${C_RESET}"
+    echo -e "${C_DEEP_PINK}║${C_RESET}                                                      ${C_DEEP_PINK}║${C_RESET}"
+    echo -e "${C_DEEP_PINK}║${C_RESET} ${C_SOFT_GREEN}✓ Backup via: ${C_SAKURA_PINK}More > Backup & Restore${C_RESET}                ${C_DEEP_PINK}║${C_RESET}"
+    echo -e "${C_DEEP_PINK}║${C_RESET} ${C_SOFT_GREEN}✓ You can restore the same backup in the new version${C_RESET} ${C_DEEP_PINK}║${C_RESET}"
+    echo -e "${C_DEEP_PINK}║${C_RESET} ${C_SOFT_GREEN}✓ All logins, plugins & data will be saved.${C_RESET}          ${C_DEEP_PINK}║${C_RESET}"
+    echo -e "${C_DEEP_PINK}║${C_RESET} ${C_SOFT_GREEN}✓ No need to set up everything again!${C_RESET}                ${C_DEEP_PINK}║${C_RESET}"
+    echo -e "${C_DEEP_PINK}╚══════════════════════════════════════════════════════╝${C_RESET}\n"
+}
+
 Run_Plugins() {
     local PLUGIN_DIR="$HOME/plugins"
 
@@ -301,3 +317,5 @@ Install_Plugin_Temp_Packages
 echo -e "${C_DEEP_PINK}--READY-- ${C_RESET}"
 
 Run_Plugins
+
+Show_Migration_Banner
