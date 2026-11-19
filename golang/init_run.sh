@@ -160,6 +160,49 @@ Wait_For_Apt_Stable() {
     sleep 2
 }
 
+Install_Plugin_Temp_Packages() {
+    local temp_file="$HOME/.post_install_temp"
+    [ ! -f "$temp_file" ] && return
+
+    local raw_pkgs
+    raw_pkgs=$(tr -s '[:space:]' ' ' < "$temp_file" | xargs)
+
+    if [ -z "$raw_pkgs" ]; then
+        rm -f "$temp_file"
+        return
+    fi
+
+    local req_pkgs=()
+    read -ra req_pkgs <<< "$raw_pkgs"
+
+    local missing_pkgs=()
+    for pkg in "${req_pkgs[@]}"; do
+        if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+            missing_pkgs+=("$pkg")
+        fi
+    done
+
+    if [ ${#missing_pkgs[@]} -gt 0 ]; then
+        echo -e "\n${C_CHERRY}[!] Installing plugin packages: ${missing_pkgs[*]}${C_RESET}"
+        pkg update -y
+        DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
+            -o Dpkg::Options::="--force-confdef" \
+            -o Dpkg::Options::="--force-confold"
+
+        if DEBIAN_FRONTEND=noninteractive pkg install -y "${missing_pkgs[@]}"; then
+            pkg clean >/dev/null 2>&1
+            Wait_For_Apt_Stable
+            hash -r
+            echo -e "${C_SOFT_GREEN}[✓] Plugin packages installed successfully.${C_RESET}"
+            rm -f "$temp_file"
+        else
+            echo -e "${C_DEEP_PINK}[✖] Failed to install plugin packages: ${missing_pkgs[*]}${C_RESET}"
+        fi
+    else
+        rm -f "$temp_file"
+    fi
+}
+
 
 # Always reset launch flag on start
 rm -f "$HOME/.launch"
@@ -168,6 +211,7 @@ termux-wake-lock
 
 Setup_Prerequisites
 Check_And_Install_Packages
+Install_Plugin_Temp_Packages
 
 echo -e "${C_DEEP_PINK}--READY-- ${C_RESET}"
 
