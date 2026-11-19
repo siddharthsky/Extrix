@@ -160,28 +160,95 @@ Wait_For_Apt_Stable() {
     sleep 2
 }
 
-Install_Plugin_Temp_Packages() {
-    local temp_file="$HOME/.post_install_temp"
-    [ ! -f "$temp_file" ] && return
 
-    local raw_pkgs
-    raw_pkgs=$(tr -s '[:space:]' ' ' < "$temp_file" | xargs)
+Uninstall_Plugin_Temp_Packages() {
+    local uninstall_file="$HOME/.post_uninstall_temp"
+    local registry_file="$HOME/.ctx_pkgs"
+    [ ! -f "$uninstall_file" ] && return
 
-    if [ -z "$raw_pkgs" ]; then
-        rm -f "$temp_file"
-        return
+    local candidate_pkgs=()
+
+    while IFS='=' read -r raw_key raw_val; do
+        local key val
+        key=$(echo "$raw_key" | xargs)
+        val=$(echo "$raw_val" | xargs)
+        [ -z "$key" ] && continue
+
+        # Remove this plugin's entry from .ctx_pkgs first
+        if [ -f "$registry_file" ]; then
+            grep -v "^${key}[[:space:]]*=" "$registry_file" > "${registry_file}.tmp" 2>/dev/null || true
+            mv "${registry_file}.tmp" "$registry_file"
+        fi
+
+        if [ -n "$val" ]; then
+            local line_pkgs=()
+            read -ra line_pkgs <<< "$val"
+            for p in "${line_pkgs[@]}"; do
+                candidate_pkgs+=("$p")
+            done
+        fi
+    done < "$uninstall_file"
+
+    # Collect all packages still needed by remaining plugins in .ctx_pkgs
+    local in_use_pkgs=" ${REQUIRED_PACKAGES[*]} "
+    if [ -f "$registry_file" ]; then
+        while IFS='=' read -r _ r_val; do
+            local clean_val
+            clean_val=$(echo "$r_val" | xargs)
+            [ -n "$clean_val" ] && in_use_pkgs+="${clean_val} "
+        done < "$registry_file"
     fi
 
-    local req_pkgs=()
-    read -ra req_pkgs <<< "$raw_pkgs"
-
-    local missing_pkgs=()
-    for pkg in "${req_pkgs[@]}"; do
-        if ! dpkg -s "$pkg" >/dev/null 2>&1; then
-            missing_pkgs+=("$pkg")
+    # Filter packages that are safe to uninstall
+    local to_uninstall=()
+    for pkg in "${candidate_pkgs[@]}"; do
+        if [[ "$in_use_pkgs" != *" $pkg "* ]] && dpkg -s "$pkg" >/dev/null 2>&1; then
+            if [[ " ${to_uninstall[*]} " != *" $pkg "* ]]; then
+                to_uninstall+=("$pkg")
+            fi
         fi
     done
 
+    if [ ${#to_uninstall[@]} -gt 0 ]; then
+        echo -e "\n${C_CHERRY}[!] Uninstalling unused plugin packages: ${to_uninstall[*]}${C_RESET}"
+        if DEBIAN_FRONTEND=noninteractive pkg uninstall -y "${to_uninstall[@]}"; then
+            DEBIAN_FRONTEND=noninteractive apt-get autoremove -y >/dev/null 2>&1
+            Wait_For_Apt_Stable
+            hash -r
+            echo -e "${C_SOFT_GREEN}[✓] Unused plugin packages removed.${C_RESET}"
+        else
+            echo -e "${C_DEEP_PINK}[✖] Failed to uninstall some packages: ${to_uninstall[*]}${C_RESET}"
+        fi
+    fi
+
+    rm -f "$uninstall_file"
+}
+
+Install_Plugin_Temp_Packages() {
+    local install_file="$HOME/.post_install_temp"
+    local registry_file="$HOME/.ctx_pkgs"
+    [ ! -f "$install_file" ] && return
+
+    local missing_pkgs=()
+
+    while IFS='=' read -r raw_key raw_val; do
+        local key val
+        key=$(echo "$raw_key" | xargs)
+        val=$(echo "$raw_val" | xargs)
+        [ -z "$key" ] || [ -z "$val" ] && continue
+
+        local line_pkgs=()
+        read -ra line_pkgs <<< "$val"
+        for pkg in "${line_pkgs[@]}"; do
+            if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+                if [[ " ${missing_pkgs[*]} " != *" $pkg "* ]]; then
+                    missing_pkgs+=("$pkg")
+                fi
+            fi
+        done
+    done < "$install_file"
+
+    local install_ok=true
     if [ ${#missing_pkgs[@]} -gt 0 ]; then
         echo -e "\n${C_CHERRY}[!] Installing plugin packages: ${missing_pkgs[*]}${C_RESET}"
         pkg update -y
@@ -194,12 +261,27 @@ Install_Plugin_Temp_Packages() {
             Wait_For_Apt_Stable
             hash -r
             echo -e "${C_SOFT_GREEN}[✓] Plugin packages installed successfully.${C_RESET}"
-            rm -f "$temp_file"
         else
             echo -e "${C_DEEP_PINK}[✖] Failed to install plugin packages: ${missing_pkgs[*]}${C_RESET}"
+            install_ok=false
         fi
-    else
-        rm -f "$temp_file"
+    fi
+
+    if [ "$install_ok" = true ]; then
+        touch "$registry_file"
+        while IFS='=' read -r raw_key raw_val; do
+            local key val
+            key=$(echo "$raw_key" | xargs)
+            val=$(echo "$raw_val" | xargs)
+            [ -z "$key" ] || [ -z "$val" ] && continue
+
+            # Replace existing entry for this plugin if present, then append
+            grep -v "^${key}[[:space:]]*=" "$registry_file" > "${registry_file}.tmp" 2>/dev/null || true
+            mv "${registry_file}.tmp" "$registry_file"
+            echo "${key} = ${val}" >> "$registry_file"
+        done < "$install_file"
+
+        rm -f "$install_file"
     fi
 }
 
@@ -211,6 +293,7 @@ termux-wake-lock
 
 Setup_Prerequisites
 Check_And_Install_Packages
+Uninstall_Plugin_Temp_Packages
 Install_Plugin_Temp_Packages
 
 echo -e "${C_DEEP_PINK}--READY-- ${C_RESET}"
