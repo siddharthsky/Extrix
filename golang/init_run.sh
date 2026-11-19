@@ -318,4 +318,4 @@ echo -e "${C_DEEP_PINK}--READY-- ${C_RESET}"
 
 Run_Plugins
 
-Show_Migration_Banner
+# Show_Migration_Banner
