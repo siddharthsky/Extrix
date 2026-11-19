@@ -222,6 +222,7 @@ Uninstall_Plugin_Temp_Packages() {
     fi
 
     rm -f "$uninstall_file"
+    clear
 }
 
 Install_Plugin_Temp_Packages() {
@@ -282,6 +283,7 @@ Install_Plugin_Temp_Packages() {
         done < "$install_file"
 
         rm -f "$install_file"
+        clear
     fi
 }
 
